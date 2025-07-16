@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth 
+from django.http import HttpResponse
+from .models import BirthdayInfo
 
 def index(request):
     return render(request, 'index.html')
@@ -56,6 +58,30 @@ def logout(request):
     return redirect('/')
 
 
+def addBirthday(request):
+    if request.method == 'POST':
+        get_user = request.user
+        community_user_name = User.objects.get(username=get_user) 
+        
+        personName = request.POST['personName']
+        birthDate = request.POST['birthDate']
+        phoneNumber = request.POST['phoneNumber']
+        email =  request.POST['email']
+        matric =  request.POST['matric']
+        department =  request.POST['department']
+        level =  request.POST['level']
+        
+        personImage = request.FILES.get()
+        
+        birthdayInfo = BirthdayInfo.objects.create(community_user_name=community_user_name,personName=personName,birthDate=birthDate, phoneNumber=phoneNumber, email=email, matric=matric, department=department,level=level)
+        birthdayInfo.save();
+        
+        messages.success(request, f"{personName} successfully added")
+        
+        return HttpResponse('Saved')
+
 def search_community(request):
     return render(request, 'search_community.html')
  
+def home(request):
+    return render(request, 'home.html')
