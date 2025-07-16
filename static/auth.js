@@ -35,29 +35,7 @@
             this.classList.toggle('fa-eye');
             this.classList.toggle('fa-eye-slash');
         });
-
-        // Form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const container = document.querySelector('.login-container');
-            const btn = document.querySelector('.login-btn');
-            
-            // Add loading state
-            container.classList.add('loading');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
-            
-            // Simulate login process
-            setTimeout(() => {
-                container.classList.remove('loading');
-                btn.innerHTML = '<i class="fas fa-check"></i> Success!';
-                
-                setTimeout(() => {
-                    alert('🎉 Login successful! Redirecting to dashboard...');
-                    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
-                }, 1500);
-            }, 2000);
-        });
+ 
 
         // Input focus effects
         document.querySelectorAll('.form-input').forEach(input => {
@@ -173,3 +151,6 @@
         }
 
         updateFavicon();
+
+    
+       

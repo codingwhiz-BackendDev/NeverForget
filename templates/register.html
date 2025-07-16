@@ -11,6 +11,16 @@
 </head>
 
 <body>
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">
+            <i class="message-icon fas fa- {{ message.tags }}"></i>
+            <div class="message-text">{{ message }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <div class="animated-bg"></div>
 
     <div class="floating-shapes">
@@ -34,8 +44,8 @@
             </div>
         </div>
 
-        <form class="login-form" id="loginForm">
-
+        <form method="POST" class="login-form" id="loginForm">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username</label>
                 <div class="input-container">
@@ -80,7 +90,9 @@
             </button>
 
             <div class="signup-link">
-                Already have an account? <a href="login">Sign in here</a>
+                Already have an account? <button class="login-btn-sm">
+                    <a href="login">Sign in here</a>
+                </button>
             </div>
         </form>
     </div>
