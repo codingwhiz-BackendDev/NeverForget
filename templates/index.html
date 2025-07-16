@@ -1,9 +1,165 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Welcome to Django</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeverForget - Remember Every Birthday</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+
 </head>
+
 <body>
-    
-</body>
-</html>
+    <div class="scroll-progress" id="scroll-progress"></div>
+    <div class="birthday-animation" id="particles"></div>
+
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <i class="fas fa-birthday-cake"></i>
+                NeverForget
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features"><i class="fas fa-star"></i> Features</a></li>
+                <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="animated-bg"></div>
+            <div class="floating-shapes">
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+            </div>
+
+            <div class="hero-content container">
+                <h1>
+                    <i class="fas fa-heart"></i>
+                    Never Forget a Birthday Again
+                </h1>
+                <p>Connect your community and make every birthday special. Share a simple link, collect birthdays, and
+                    ensure no one feels forgotten on their special day. Perfect for WhatsApp groups, teams, and
+                    close-knit communities.</p>
+
+                <div class="cta-buttons">
+                    <a href="register" class="btn btn-primary" onclick="createCommunity()">
+                        <i class="fas fa-plus-circle"></i>
+                        Create Community
+                    </a>
+                    <a href="search_community" class="btn btn-secondary" onclick="joinCommunity()">
+                        <i class="fas fa-users"></i>
+                        Join Community
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-magic"></i>
+                    Why Choose NeverForget?
+                </h2>
+                <p class="section-subtitle">Simple, beautiful, and effective birthday management for communities of all
+                    sizes. Transform forgotten dates into celebrated moments.</p>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-share-alt feature-icon"></i>
+                        <h3>Easy Sharing</h3>
+                        <p>Share a single link with your community. Everyone can add their birthday in seconds without
+                            registration hassles or complex setup processes.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-bell feature-icon"></i>
+                        <h3>Smart Reminders</h3>
+                        <p>Get timely notifications before birthdays so you never miss celebrating someone special.
+                            Customizable reminder settings for your needs.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-heart-circle feature-icon"></i>
+                        <h3>Community Focused</h3>
+                        <p>Perfect for WhatsApp groups, teams, families, or any community where birthdays matter and
+                            connections count most.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-palette feature-icon"></i>
+                        <h3>Beautiful Interface</h3>
+                        <p>Enjoy a clean, modern design with delightful animations that makes managing birthdays a
+                            joyful experience for everyone.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt feature-icon"></i>
+                        <h3>Privacy First</h3>
+                        <p>Your community's birthday information is kept secure and private, shared only within your
+                            group with enterprise-grade security.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fas fa-gift feature-icon"></i>
+                        <h3>Spread Joy</h3>
+                        <p>Transform birthdays from forgotten dates into celebrated moments that strengthen bonds and
+                            create lasting memories together.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="contact-content">
+                    <h2 class="section-title">
+                        <i class="fas fa-envelope-open-text"></i>
+                        Get In Touch
+                    </h2>
+                    <p class="section-subtitle">Want to know developer? or Have questions or suggestions? We'd love to
+                        hear from you! Reach out
+                        through any of these channels.</p>
+
+                    <div class="contact-grid">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <h3>Email</h3>
+                            <p>your-email@example.com</p>
+                        </div>
+
+                        <div class="contact-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <h3>WhatsApp</h3>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+
+                        <div class="contact-item">
+                            <i class="fab fa-twitter"></i>
+                            <h3>Twitter</h3>
+                            <p>@neverforget_app</p>
+                        </div>
+
+                        <div class="contact-item">
+                            <i class="fas fa-user"></i>
+                            <h3>About Developer</h3>
+                            <p>@neverforget_app</p>
+                        </div>
+
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <h3>Location</h3>
+                            <p>Your City, Your Country</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'index.js' %}"></script>
