@@ -193,29 +193,7 @@
             }
 
              
-             
-            // Enhanced button interactions Count Down
-            function initBirthdayButtons() {
-                document.querySelectorAll(".btn-celebrate").forEach((btn) => {
-                    btn.addEventListener("click", function () {
-                        const originalText = this.innerHTML
-                        this.innerHTML = '<i class="fas fa-heart"></i> Wished!'
-                        this.style.background = "linear-gradient(45deg, #98fb98, #00ff7f)"
-                        this.disabled = true
-
-                        // Create celebration effect
-                        createCelebrationEffect(this)
-
-                        setTimeout(() => {
-                            this.innerHTML = originalText
-                            this.style.background = "linear-gradient(45deg, #ff6b6b, #ff1493)"
-                            this.disabled = false
-                        }, 3000)
-                    })
-                })
-
-                 
-            }
+              
 
             function createCelebrationEffect(button) {
                 const rect = button.getBoundingClientRect()
@@ -510,8 +488,7 @@
 
             // Initialize everything when page loads
             document.addEventListener("DOMContentLoaded", () => {
-                initViewToggle() 
-                initBirthdayButtons()
+                initViewToggle()  
 
                 // Add scroll event listeners with throttling
                 window.addEventListener("scroll", throttle(updateScrollProgress, 16))

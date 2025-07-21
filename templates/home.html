@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'home.css' %}">
     <link rel="stylesheet" href="{% static 'message.css' %}" />
@@ -105,96 +106,85 @@
                     </button>
                 </div>
 
+
                 <div class="birthday-timeline">
-                    <div class="birthday-item today">
-                        <div class="birthday-date">
-                            <span class="day">16</span>
-                            <span class="month">Jul</span>
-                            <span class="badge">Today</span>
-                        </div>
-                        <div class="birthday-info">
-                            <div class="person-avatar">
-                                <img src="{% static 'sta.jpg' %}" alt="Sarah">
+                    {% if todays_birthdays %}
+                        {% for b in todays_birthdays %}
+                        <div class="birthday-item today">
+                            <div class="birthday-date">
+                                <span class="badge">Today</span>
+                                <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
                             </div>
-                            <div class="person-details">
-                                <h3>Sarah Johnson</h3>
-                                <p>Turning 28 today! 🎉</p>
-                                <div class="birthday-actions">
-                                    <button class="btn-small btn-celebrate">
-                                        <i class="fas fa-heart"></i>
-                                        Wish Happy Birthday
-                                    </button>
+                            <div class="birthday-info">
+                                <div class="person-avatar">
+                                    <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
+                                </div>
+                                <div class="person-details">
+                                    <h3>{{ b.personName }}</h3>
+                                    <p>Turns {{ b.birthDate|timesince:"now" }} today! 🎉</p>
+                                    <div class="birthday-actions">
+                                        <button class="btn-small btn-celebrate">
+                                            <i class="fas fa-heart"></i>
+                                            Wish Happy Birthday
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        {% endfor %}
+                    {% endif %}
 
-                    <div class="birthday-item tomorrow">
-                        <div class="birthday-date">
-                            <span class="day">17</span>
-                            <span class="month">Jul</span>
-                            <span class="badge">Tomorrow</span>
-                        </div>
-                        <div class="birthday-info">
-                            <div class="person-avatar">
-                                <img src="{% static 'sta.jpg' %}" alt="Mike">
+                    {% if tomorrows_birthdays %}
+                        {% for b in tomorrows_birthdays %}
+                        <div class="birthday-item tomorrow">
+                            <div class="birthday-date">
+                                <span class="badge">Tomorrow</span>
+                                <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
                             </div>
-                            <div class="person-details">
-                                <h3>Mike Chen</h3>
-                                <p>Turning 32 tomorrow</p>
-                                <div class="birthday-actions">
-                                    <button class="btn-small btn-remind">
-                                        <i class="fas fa-bell"></i>
-                                        View
-                                    </button>
+                            <div class="birthday-info">
+                                <div class="person-avatar">
+                                    <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
+                                </div>
+                                <div class="person-details">
+                                    <h3>{{ b.personName }}</h3>
+                                    <p>Turns {{ b.birthDate|timesince:"now" }} tomorrow</p>
+                                    <div class="birthday-actions">
+                                        <button class="btn-small btn-remind">
+                                            <i class="fas fa-bell"></i>
+                                            View
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        {% endfor %}
+                    {% endif %}
 
-                    <div class="birthday-item">
-                        <div class="birthday-date">
-                            <span class="day">22</span>
-                            <span class="month">Jul</span>
-                        </div>
-                        <div class="birthday-info">
-                            <div class="person-avatar">
-                                <img src="{% static 'sta.jpg' %}" alt="Emma">
+                    {% if upcoming_birthdays %}
+                        {% for b in upcoming_birthdays %}
+                        <div class="birthday-item">
+                            <div class="birthday-date">
+                                <span class="badge">Upcoming</span>
+                                <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
                             </div>
-                            <div class="person-details">
-                                <h3>Emma Davis</h3>
-                                <p>Turning 25 in 6 days</p>
-                                <div class="birthday-actions">
-                                    <button class="btn-small btn-remind">
-                                        <i class="fas fa-bell"></i>
-                                        Set Reminder
-                                    </button>
+                            <div class="birthday-info">
+                                <div class="person-avatar">
+                                    <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
+                                </div>
+                                <div class="person-details">
+                                    <h3>{{ b.personName }}</h3>
+                                    <p>Turns {{ b.birthDate|timesince:"now" }} in {{ b.birthDate|date:'jS F' }}</p>
+                                    <div class="birthday-actions">
+                                        <button class="btn-small btn-remind">
+                                            <i class="fas fa-bell"></i>
+                                            Set Reminder
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="birthday-item">
-                        <div class="birthday-date">
-                            <span class="day">28</span>
-                            <span class="month">Jul</span>
-                        </div>
-                        <div class="birthday-info">
-                            <div class="person-avatar">
-                                <img src="{% static 'sta.jpg' %}" alt="Alex">
-                            </div>
-                            <div class="person-details">
-                                <h3>Alex Rodriguez</h3>
-                                <p>Turning 30 in 12 days</p>
-                                <div class="birthday-actions">
-                                    <button class="btn-small btn-remind">
-                                        <i class="fas fa-bell"></i>
-                                        Set Reminder
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </section>
