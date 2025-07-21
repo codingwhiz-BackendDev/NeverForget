@@ -109,81 +109,81 @@
 
                 <div class="birthday-timeline">
                     {% if todays_birthdays %}
-                        {% for b in todays_birthdays %}
-                        <div class="birthday-item today">
-                            <div class="birthday-date">
-                                <span class="badge">Today</span>
-                                <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
+                    {% for b in todays_birthdays %}
+                    <div class="birthday-item today">
+                        <div class="birthday-date">
+                            <span class="badge">Today</span>
+                            <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
+                        </div>
+                        <div class="birthday-info">
+                            <div class="person-avatar">
+                                <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
                             </div>
-                            <div class="birthday-info">
-                                <div class="person-avatar">
-                                    <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
-                                </div>
-                                <div class="person-details">
-                                    <h3>{{ b.personName }}</h3>
-                                    <p>Turns {{ b.birthDate|timesince:"now" }} today! 🎉</p>
-                                    <div class="birthday-actions">
-                                        <button class="btn-small btn-celebrate">
-                                            <i class="fas fa-heart"></i>
-                                            Wish Happy Birthday
-                                        </button>
-                                    </div>
+                            <div class="person-details">
+                                <h3>{{ b.personName }}</h3>
+                                <p>Turning {{ b.age_on_next_bday }} today! 🎉</p>
+                                <div class="birthday-actions">
+                                    <button class="btn-small btn-celebrate">
+                                        <i class="fas fa-heart"></i>
+                                        Wish Happy Birthday
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        {% endfor %}
+                    </div>
+                    {% endfor %}
                     {% endif %}
 
                     {% if tomorrows_birthdays %}
-                        {% for b in tomorrows_birthdays %}
-                        <div class="birthday-item tomorrow">
-                            <div class="birthday-date">
-                                <span class="badge">Tomorrow</span>
-                                <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
+                    {% for b in tomorrows_birthdays %}
+                    <div class="birthday-item tomorrow">
+                        <div class="birthday-date">
+                            <span class="badge">Tomorrow</span>
+                            <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
+                        </div>
+                        <div class="birthday-info">
+                            <div class="person-avatar">
+                                <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
                             </div>
-                            <div class="birthday-info">
-                                <div class="person-avatar">
-                                    <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
-                                </div>
-                                <div class="person-details">
-                                    <h3>{{ b.personName }}</h3>
-                                    <p>Turns {{ b.birthDate|timesince:"now" }} tomorrow</p>
-                                    <div class="birthday-actions">
-                                        <button class="btn-small btn-remind">
-                                            <i class="fas fa-bell"></i>
-                                            View
-                                        </button>
-                                    </div>
+                            <div class="person-details">
+                                <h3>{{ b.personName }}</h3>
+                                <p>Turning {{ b.age_on_next_bday }} tomorrow</p>
+                                <div class="birthday-actions">
+                                    <button class="btn-small btn-remind">
+                                        <i class="fas fa-bell"></i>
+                                        View
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        {% endfor %}
+                    </div>
+                    {% endfor %}
                     {% endif %}
 
                     {% if upcoming_birthdays %}
-                        {% for b in upcoming_birthdays %}
-                        <div class="birthday-item">
-                            <div class="birthday-date">
-                                <span class="badge">Upcoming</span>
-                                <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
+                    {% for b in upcoming_birthdays %}
+                    <div class="birthday-item">
+                        <div class="birthday-date">
+                            <span class="badge">Upcoming</span>
+                            <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
+                        </div>
+                        <div class="birthday-info">
+                            <div class="person-avatar">
+                                <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
                             </div>
-                            <div class="birthday-info">
-                                <div class="person-avatar">
-                                    <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
-                                </div>
-                                <div class="person-details">
-                                    <h3>{{ b.personName }}</h3>
-                                    <p>Turns {{ b.birthDate|timesince:"now" }} in {{ b.birthDate|date:'jS F' }}</p>
-                                    <div class="birthday-actions">
-                                        <button class="btn-small btn-remind">
-                                            <i class="fas fa-bell"></i>
-                                            Set Reminder
-                                        </button>
-                                    </div>
+                            <div class="person-details">
+                                <h3>{{ b.personName }}</h3>
+                                <p>Turning {{ b.age_on_next_bday }} in {{ b.days_until }} days</p>
+                                <div class="birthday-actions">
+                                    <button class="btn-small btn-remind">
+                                        <i class="fas fa-bell"></i>
+                                        Set Reminder
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        {% endfor %}
+                    </div>
+                    {% endfor %}
                     {% endif %}
                 </div>
             </div>

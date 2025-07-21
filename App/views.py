@@ -6,20 +6,16 @@ from .models import BirthdayInfo
 from django.core.files.storage import FileSystemStorage
 from datetime import date, timedelta
 
+def calculate_age(born, ref_date):
+    return ref_date.year - born.year - ((ref_date.month, ref_date.day) < (born.month, born.day))
+
 def index(request):
     return render(request, 'index.html')
 
 def home(request):
     today = date.today()
-    tomorrow = today + timedelta(days=1)
-
     all_birthdays = BirthdayInfo.objects.filter(community_user_name=request.user)
     
-    print(f"-----------------------------------------")
-    print(f"Checking birthdays for user: {request.user}")
-    print(f"Today's date: {today}")
-    print(f"Found {all_birthdays.count()} total birthdays for this user.")
-
     todays_birthdays = []
     tomorrows_birthdays = []
     upcoming_birthdays = []
@@ -27,23 +23,28 @@ def home(request):
     for b in all_birthdays:
         if b.birthDate:
             bday_this_year = b.birthDate.replace(year=today.year)
-            
-            print(f"Processing {b.personName}'s birthday on {b.birthDate} (this year: {bday_this_year})")
+            if bday_this_year < today:
+                next_bday = bday_this_year.replace(year=today.year + 1)
+            else:
+                next_bday = bday_this_year
 
-            if bday_this_year == today:
+            days_until = (next_bday - today).days
+            days_since = (today - bday_this_year).days if bday_this_year < today else None
+            age_on_next_bday = calculate_age(b.birthDate, next_bday)
+
+            b.days_until = days_until
+            b.days_since = days_since
+            b.age_on_next_bday = age_on_next_bday
+
+            if days_until == 0:
                 todays_birthdays.append(b)
-                print(f"  -> Added to TODAY'S birthdays")
-            elif bday_this_year == tomorrow:
+            elif days_until == 1:
                 tomorrows_birthdays.append(b)
-                print(f"  -> Added to TOMORROW'S birthdays")
-            elif today < bday_this_year <= today + timedelta(days=7):
+            else:
                 upcoming_birthdays.append(b)
-                print(f"  -> Added to UPCOMING birthdays")
-    
-    print(f"Final list - Today: {[p.personName for p in todays_birthdays]}")
-    print(f"Final list - Tomorrow: {[p.personName for p in tomorrows_birthdays]}")
-    print(f"Final list - Upcoming: {[p.personName for p in upcoming_birthdays]}")
-    print(f"-----------------------------------------")
+
+    # Sort: future birthdays first, then past birthdays (most recent first)
+    upcoming_birthdays.sort(key=lambda x: (x.days_until if x.days_until > 0 else 9999 + x.days_since))
 
     context = {
         'todays_birthdays': todays_birthdays,
