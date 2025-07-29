@@ -46,13 +46,11 @@
                     <span class="notification-badge">3</span>
                 </button>
                 <div class="user-menu">
-                    <img src="{% static 'sta.jpg' %}" alt="Profile" class="profile-pic">
-                    <div class="dropdown" id="profileDropdown">
-                        <a href="#"><i class="fas fa-user"></i> Profile</a>
-                        <a href="#"><i class="fas fa-cog"></i> Settings</a>
-                        <a href="#"><i class="fas fa-share-alt"></i> Share Link</a>
-                        <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                    </div>
+                    <!-- Changed: Profile picture is now inside a button to act as a toggle -->
+                    <button class="btn-icon profile-toggle" onclick="toggleProfileMenu()">
+                        <img src="{% static 'sta.jpg' %}" alt="Profile" class="profile-pic">
+                    </button>
+                    <!-- The dropdown content will be dynamically created by JavaScript -->
                 </div>
             </div>
         </nav>

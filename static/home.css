@@ -129,54 +129,80 @@ nav {
     transform: scale(1.1);
 }
 
-.dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
+/* Add this new section for the profile panel */
+.profile-panel {
+    position: fixed;
+    top: 80px;
+    /* Adjust as needed to align with your header */
+    right: 20px;
+    /* Adjust as needed */
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
-    border-radius: 10px;
-    padding: 0.5rem 0;
-    min-width: 150px;
+    border-radius: 15px;
+    padding: 1rem;
+    min-width: 250px;
+    max-width: 300px;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    /* Click-to-show styles */
+    z-index: 2000;
+    animation: slideInRight 0.3s ease-out;
     display: none;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
+    /* Initially hidden */
+}
+
+.profile-panel.show {
+    display: block;
+}
+
+.profile-panel .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-panel .profile-header h3 {
+    color: white;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.profile-panel .profile-list a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
     transition: all 0.3s ease;
-}
-
-/* Disable the original hover effect */
-.user-menu:hover .dropdown {
-    display: none;
-    opacity: 0;
-    visibility: hidden;
-}
-
-/* This class will be toggled by JavaScript to show the dropdown */
-.dropdown.show {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.dropdown a {
-    display: block;
     color: white;
     text-decoration: none;
-    padding: 0.8rem 1rem;
-    transition: all 0.3s ease;
 }
 
-.dropdown a:hover {
+.profile-panel .profile-list a:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.dropdown a i {
-    margin-right: 0.5rem;
-    width: 16px;
+.profile-panel .profile-list a i {
+    color: #ffd700;
+    /* You can choose a different color if desired */
+    font-size: 1.2rem;
+}
+
+/* Ensure the old dropdown styles are overridden or removed */
+.dropdown {
+    display: none !important;
+    /* Force hide the old dropdown */
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+.user-menu:hover .dropdown {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
 }
 
 /* Main Content */

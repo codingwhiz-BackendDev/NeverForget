@@ -85,7 +85,7 @@
             // Modal functions with enhanced animations
             function addBirthday() {
                 const modal = document.getElementById("addBirthdayModal")
-                modal.style.display = "block"
+                modal.style.display = "block" 
 
                 // Add entrance animation
                 const modalContent = modal.querySelector(".modal-content")
@@ -124,49 +124,152 @@
                 }, 500)
             }
 
-            function showNotificationPanel() {
-                // Create temporary notification panel
-                const panel = document.createElement("div")
-                panel.className = "notification-panel"
-                panel.innerHTML = `
-        <div class="notification-header">
-            <h3><i class="fas fa-bell"></i> Notifications</h3>
-            <button onclick="this.parentElement.parentElement.remove()" class="close-btn">&times;</button>
-        </div>
-        <div class="notification-list">
-            <div class="notification-item">
-                <i class="fas fa-birthday-cake"></i>
-                <div class="notification-content">
-                    <h4>Sarah's Birthday Today!</h4>
-                    <p>Don't forget to wish her happy birthday</p>
-                </div>
-            </div>
-            <div class="notification-item">
-                <i class="fas fa-bell"></i>
-                <div class="notification-content">
-                    <h4>Mike's Birthday Tomorrow</h4>
-                    <p>Reminder: Mike turns 32 tomorrow</p>
-                </div>
-            </div>
-            <div class="notification-item">
-                <i class="fas fa-users"></i>
-                <div class="notification-content">
-                    <h4>New Member Joined</h4>
-                    <p>Lisa Wang joined the community</p>
-                </div>
-            </div>
-        </div>
-    `
+            // Function to toggle the profile menu panel
+            function toggleProfileMenu() {
+                const profileToggle = document.querySelector(".profile-toggle");
+                const profilePic = profileToggle.querySelector(".profile-pic");
 
-                document.body.appendChild(panel)
+                // Animate profile pic (re-using shake animation)
+                profilePic.style.animation = "shake 0.5s ease-in-out";
 
-                // Auto-remove after 5 seconds
+                showProfilePanel(); // Call the function to show/hide the panel
+
+                // Reset animation after it completes
                 setTimeout(() => {
-                    if (panel.parentNode) {
-                        panel.remove()
-                    }
-                }, 5000)
+                    profilePic.style.animation = "";
+                }, 500);
             }
+            function showProfilePanel() {
+                let panel = document.getElementById("profilePanel");
+
+                if (!panel) {
+                    // Create the panel if it doesn't exist
+                    panel = document.createElement("div");
+                    panel.id = "profilePanel";
+                    panel.className = "profile-panel";
+                    panel.innerHTML = `
+                        <div class="profile-header">
+                            <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+                            <button onclick="this.parentElement.parentElement.remove()" class="close-btn">&times;</button>
+                        </div>
+                        <div class="profile-list">
+                            <a href="#"><i class="fas fa-user"></i> Profile</a>
+                            <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="#"><i class="fas fa-share-alt"></i> Share Link</a>
+                            <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    `;
+                    document.body.appendChild(panel);
+                    panel.style.display = "block";
+                    panel.style.animation = "slideInRight 0.3s ease-out";
+                } else {
+                    // Toggle visibility if panel already exists
+                    if (panel.style.display === "block") {
+                        panel.style.animation = "modalSlideOut 0.3s ease-in";
+                        setTimeout(() => {
+                            panel.style.display = "none";
+                            panel.remove(); // Remove from DOM after animation
+                        }, 300);
+                    } else {
+                        panel.style.display = "block";
+                        panel.style.animation = "slideInRight 0.3s ease-out";
+                    }
+                }
+            }
+// Function to show/hide the profile panel
+function showProfilePanel() {
+    let panel = document.getElementById("profilePanel");
+
+    if (!panel) {
+        // Create the panel if it doesn't exist
+        panel = document.createElement("div");
+        panel.id = "profilePanel";
+        panel.className = "profile-panel";
+        panel.innerHTML = `
+            <div class="profile-header">
+                <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+                <button onclick="this.parentElement.parentElement.remove()" class="close-btn">&times;</button>
+            </div>
+            <div class="profile-list">
+                <a href="#"><i class="fas fa-user"></i> Profile</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#"><i class="fas fa-share-alt"></i> Share Link</a>
+                <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        `;
+        document.body.appendChild(panel);
+        panel.style.display = "block";
+        panel.style.animation = "slideInRight 0.3s ease-out";
+    } else {
+        // Toggle visibility if panel already exists
+        if (panel.style.display === "block") {
+            panel.style.animation = "modalSlideOut 0.3s ease-in";
+            setTimeout(() => {
+                panel.style.display = "none";
+                panel.remove(); // Remove from DOM after animation
+            }, 300);
+        } else {
+            panel.style.display = "block";
+            panel.style.animation = "slideInRight 0.3s ease-out";
+        }
+    }
+}
+
+// --- IMPORTANT: Update your existing functions ---
+
+// Modify showNotificationPanel to use an ID and remove itself
+function showNotificationPanel() {
+    let panel = document.getElementById("notificationPanel"); // Give it an ID
+    if (!panel) {
+        panel = document.createElement("div");
+        panel.id = "notificationPanel"; // Assign ID
+        panel.className = "notification-panel";
+        panel.innerHTML = `
+            <div class="notification-header">
+                <h3><i class="fas fa-bell"></i> Notifications</h3>
+                <button onclick="this.parentElement.parentElement.remove()" class="close-btn">&times;</button>
+            </div>
+            <div class="notification-list">
+                <div class="notification-item">
+                    <i class="fas fa-birthday-cake"></i>
+                    <div class="notification-content">
+                        <h4>Sarah's Birthday Today!</h4>
+                        <p>Don't forget to wish her happy birthday</p>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-content">
+                        <h4>Mike's Birthday Tomorrow</h4>
+                        <p>Reminder: Mike turns 32 tomorrow</p>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <i class="fas fa-users"></i>
+                    <div class="notification-content">
+                        <h4>New Member Joined</h4>
+                        <p>Lisa Wang joined the community</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(panel);
+        panel.style.display = "block"; // Show it
+        panel.style.animation = "slideInRight 0.3s ease-out";
+    } else {
+        // Toggle visibility if panel already exists
+        if (panel.style.display === "block") {
+            panel.style.animation = "modalSlideOut 0.3s ease-in"; // Re-use modalSlideOut for closing
+            setTimeout(() => {
+                panel.style.display = "none";
+                panel.remove(); // Remove from DOM after animation
+            }, 300);
+        } else {
+            panel.style.display = "block";
+            panel.style.animation = "slideInRight 0.3s ease-out";
+        }
+    }
+}
 
             // Enhanced view toggle for members
             function initViewToggle() {
