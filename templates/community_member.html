@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ member.personName }}'s Profile</title>
+    <link rel="stylesheet" href="{% static 'community_member.css' %}">
+</head>
+
+<body>
+    <div class="profile-container">
+        <div class="profile-card animated">
+            <div class="profile-image">
+                <img src="{{ member.personImage.url }}" alt="{{ member.personName }}">
+            </div>
+            <form id="profileForm" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="profile-details">
+                    <p>
+                        <input type="file" name="personImage" id="personImage" accept="image/*">
+                    </p>
+                    <h2>
+                        <input type="text" name="personName" value="{{ member.personName }}" readonly>
+                    </h2>
+                    <p>
+                        <input type="date" name="birthDate" value="{{ member.birthDate }}" readonly>
+                    </p>
+                    <p>
+                        <input type="email" name="email" value="{{ member.email }}" readonly>
+                    </p>
+                    <p>
+                        <input type="text" name="phoneNumber" value="{{ member.phoneNumber }}" readonly>
+                    </p>
+                    <p>
+                        <input type="text" name="matric" value="{{ member.matric }}" readonly>
+                    </p>
+                    <p>
+                        <input type="text" name="department" value="{{ member.department }}" readonly>
+                    </p>
+                    <p>
+                        <input type="number" name="level" value="{{ member.level }}" readonly>
+                    </p>
+                    <p>
+                        <select name="gender" disabled>
+                            <option value="male" {% if member.gender == 'male' %}selected{% endif %}>Male</option>
+                            <option value="female" {% if member.gender == 'female' %}selected{% endif %}>Female</option>
+                        </select>
+                    </p>
+                    <p>
+                        <select name="trainingLevel" disabled>
+                            <option value="baptisimal" {% if member.trainingLevel ==  'baptisimal' %}selected{% endif %}>
+                                Baptisimal</option>
+                            <option value="believers" {% if member.trainingLevel == 'believers' %}selected{% endif %}>
+                                Believers</option>
+                            <option value="workers-in-training" 
+                            {% if member.trainingLevel == 'workers-in-training' %}selected{% endif %}>Workers In Training</option>
+                            <option value="completed" 
+                            {% if member.trainingLevel == 'completed' %}
+                            selected
+                            {% endif %}>
+                                Completed</option>
+                        </select>
+                    </p>
+                </div>
+                <div class="profile-actions">
+                    <button type="button" id="editBtn" class="btn">Edit</button>
+                    <button type="submit" id="saveBtn" class="btn" style="display:none;">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'community_member.js' %}"></script>
+
+</body>
+
+</html>

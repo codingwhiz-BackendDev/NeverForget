@@ -138,14 +138,25 @@ nav {
     border-radius: 10px;
     padding: 0.5rem 0;
     min-width: 150px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Click-to-show styles */
+    display: none;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
+    transform: translateY(10px);
     transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* Disable the original hover effect */
 .user-menu:hover .dropdown {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* This class will be toggled by JavaScript to show the dropdown */
+.dropdown.show {
+    display: block;
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -473,6 +484,9 @@ main {
     gap: 1.5rem;
     margin-top: 2rem;
 }
+.members-grid a{
+    text-decoration: none;
+}
 
 .member-card {
     background: rgba(255, 255, 255, 0.1);
@@ -787,8 +801,15 @@ main {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    nav {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
     .nav-center {
-        display: none;
+        flex-basis: 100%;
+        order: 3;
+        margin-top: 1rem;
     }
 
     .stats-grid {

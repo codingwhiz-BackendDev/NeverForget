@@ -509,7 +509,31 @@
                 cards.forEach((card, index) => {
                     card.style.animationDelay = index * 0.1 + "s"
                 })
+
+                // Profile menu dropdown logic
+                const userMenu = document.querySelector('.user-menu');
+                if (userMenu) {
+                    userMenu.addEventListener('click', function(event) {
+                        event.stopPropagation(); // Prevents the window.onclick from closing it immediately
+                        document.getElementById("profileDropdown").classList.toggle("show");
+                    });
+                }
             })
+            
+            // Close the dropdown menu if the user clicks outside of it
+            window.onclick = function(event) {
+                // Check if the click was outside the user-menu area
+                if (!event.target.closest('.user-menu')) {
+                    var dropdowns = document.getElementsByClassName("dropdown");
+                    for (var i = 0; i < dropdowns.length; i++) {
+                        var openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                            openDropdown.classList.remove('show');
+                        }
+                    }
+                }
+            }
+
 
             // Easter egg - konami code
             let konamiCode = []

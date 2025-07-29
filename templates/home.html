@@ -9,6 +9,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'home.css' %}">
     <link rel="stylesheet" href="{% static 'message.css' %}" />
+    <style>
+
+    </style>
 </head>
 
 <body>
@@ -44,7 +47,7 @@
                 </button>
                 <div class="user-menu">
                     <img src="{% static 'sta.jpg' %}" alt="Profile" class="profile-pic">
-                    <div class="dropdown">
+                    <div class="dropdown" id="profileDropdown">
                         <a href="#"><i class="fas fa-user"></i> Profile</a>
                         <a href="#"><i class="fas fa-cog"></i> Settings</a>
                         <a href="#"><i class="fas fa-share-alt"></i> Share Link</a>
@@ -120,7 +123,7 @@
                                 <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
                             </div>
                             <div class="person-details">
-                                <h3>{{ b.personName }}</h3>
+                                <h3 cl>{{ b.personName }}</h3>
                                 <p>Turning {{ b.age_on_next_bday }} today! 🎉</p>
                                 <div class="birthday-actions">
                                     <button class="btn-small btn-celebrate">
@@ -208,67 +211,20 @@
                 </div>
 
                 <div class="members-grid" id="membersContainer">
-                    <div class="member-card">
-                        <div class="member-avatar">
-                            <img src="{% static 'sta.jpg' %}" alt="Sarah">
-                            <div class="birthday-indicator today"></div>
-                        </div>
-                        <div class="member-info">
-                            <h3>Sarah Johnson</h3>
-                            <p>July 16 • Today!</p>
-                        </div>
-                    </div>
 
-                    <div class="member-card">
-                        <div class="member-avatar">
-                            <img src="{% static 'sta.jpg' %}" alt="Mike">
-                            <div class="birthday-indicator tomorrow"></div>
+                    {% for birthday in all_birthdays %}
+                    <a href="{% url 'community_member' birthday.id %}" class="member-card-link">
+                        <div class="member-card">
+                            <div class="member-avatar">
+                                <img src="{{birthday.personImage.url}}" alt="{{birthday.personName}}">
+                            </div>
+                            <div class="member-info">
+                                <h3>{{birthday.personName}}</h3>
+                                <p>{{birthday.birthDate}}</p>
+                            </div>
                         </div>
-                        <div class="member-info">
-                            <h3>Mike Chen</h3>
-                            <p>July 17 • Tomorrow</p>
-                        </div>
-                    </div>
-
-                    <div class="member-card">
-                        <div class="member-avatar">
-                            <img src="{% static 'sta.jpg' %}" alt="Emma">
-                        </div>
-                        <div class="member-info">
-                            <h3>Emma Davis</h3>
-                            <p>July 22</p>
-                        </div>
-                    </div>
-
-                    <div class="member-card">
-                        <div class="member-avatar">
-                            <img src="{% static 'sta.jpg' %}" alt="Alex">
-                        </div>
-                        <div class="member-info">
-                            <h3>Alex Rodriguez</h3>
-                            <p>July 28</p>
-                        </div>
-                    </div>
-
-                    <div class="member-card">
-                        <div class="member-avatar">
-                            <img src="{% static 'sta.jpg' %}" alt="Lisa">
-                        </div>
-                        <div class="member-info">
-                            <h3>Lisa Wang</h3>
-                            <p>August 5</p>
-                        </div>
-                    </div>
-
-                    <div class="member-card">
-                        <div class="member-avatar">
-                            <img src="{% static 'sta.jpg' %}" alt="David">
-                        </div>
-                        <div class="member-info">
-                            <h3>David Brown</h3>
-                            <p>August 12</p>
-                        </div>
-                    </div>
+                    </a>
+                    {% endfor %}
                 </div>
             </div>
         </section>
@@ -370,9 +326,8 @@
     <script src="{% static 'assets/js/custom.js' %}"></script>
     <script src="{% static 'home.js' %}">
     </script>
-    <script src="{% static 'addbirthday.js' %}">
-
-    </script>
+    <script src="{% static 'addbirthday.js' %}"></script>
+    <script src="{% static 'message.js' %}"></script>
 </body>
 
 </html>

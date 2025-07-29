@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth 
 from django.http import HttpResponse
@@ -45,11 +45,15 @@ def home(request):
 
     # Sort: future birthdays first, then past birthdays (most recent first)
     upcoming_birthdays.sort(key=lambda x: (x.days_until if x.days_until > 0 else 9999 + x.days_since))
-
+    
+    # Get only the first 10 upcoming birthdays
+    upcoming_birthdays = upcoming_birthdays[:10]
+    
     context = {
         'todays_birthdays': todays_birthdays,
         'tomorrows_birthdays': tomorrows_birthdays,
         'upcoming_birthdays': upcoming_birthdays,
+        'all_birthdays':all_birthdays
     }
     return render(request, 'home.html', context)
 
@@ -143,5 +147,34 @@ def addBirthday(request):
 
 def search_community(request):
     return render(request, 'search_community.html')
+ 
+
+def community_member(request, pk):
+    member = get_object_or_404(BirthdayInfo, pk=pk)
+    if request.method == 'POST':
+        member.personName = request.POST.get('personName', member.personName)
+        
+        # Handle date field safely
+        birth_date = request.POST.get('birthDate')
+        if birth_date:
+            member.birthDate = birth_date
+        # else: do not update if empty
+        
+        member.email = request.POST.get('email', member.email)
+        phone = request.POST.get('phoneNumber')
+        member.phoneNumber = phone if phone else member.phoneNumber
+        member.matric = request.POST.get('matric', member.matric)
+        member.department = request.POST.get('department', member.department)
+        level = request.POST.get('level')
+        member.level = level if level else member.level
+        member.gender = request.POST.get('gender', member.gender)
+        member.trainingLevel = request.POST.get('trainingLevel', member.trainingLevel)
+        # Handle image upload if a new image is provided
+        if request.FILES.get('personImage'):
+            member.personImage = request.FILES['personImage']
+        member.save()
+        messages.success(request, "Profile updated successfully!")
+        return redirect('community_member', pk=member.pk)
+    return render(request, 'community_member.html', {'member': member})
  
 
