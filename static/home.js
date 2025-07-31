@@ -153,8 +153,7 @@
                             <button onclick="this.parentElement.parentElement.remove()" class="close-btn">&times;</button>
                         </div>
                         <div class="profile-list">
-                            <a href="#"><i class="fas fa-user"></i> Profile</a>
-                            <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="/profile"><i class="fas fa-user"></i> Profile</a> 
                             <a href="#"><i class="fas fa-share-alt"></i> Share Link</a>
                             <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                         </div>
@@ -191,8 +190,7 @@ function showProfilePanel() {
                 <button onclick="this.parentElement.parentElement.remove()" class="close-btn">&times;</button>
             </div>
             <div class="profile-list">
-                <a href="#"><i class="fas fa-user"></i> Profile</a>
-                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                <a href="/profile"><i class="fas fa-user"></i> Profile</a> 
                 <a href="#"><i class="fas fa-share-alt"></i> Share Link</a>
                 <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>

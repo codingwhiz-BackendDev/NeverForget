@@ -10,4 +10,5 @@ urlpatterns = [
     path('add_birthday', views.addBirthday, name='add_birthday'),
     path('profile', views.profile, name='profile'),
     path('community_member/<int:pk>/', views.community_member, name='community_member'),
+    path('editAdminProfile', views.editAdminProfile, name = 'editAdminProfile'),
 ]

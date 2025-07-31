@@ -1,4 +1,5 @@
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -31,3 +32,15 @@ class BirthdayInfo(models.Model):
     
     def __str__(self):
         return self.personName
+
+
+class AdminProfile(models.Model): 
+    user = models.ForeignKey(User, on_delete=models.CASCADE , null=True)
+    community_name = models.CharField(max_length=50, null=True)
+    adminImage = models.ImageField(upload_to='Admin Images', null=True, blank=True)
+    email = models.EmailField(max_length=254)
+    phone_number = PhoneNumberField(region='NG')
+    birthday = models.DateField(auto_now=False, auto_now_add=False, null=True) 
+    
+    def __str__(self):
+        return str(self.community_name)

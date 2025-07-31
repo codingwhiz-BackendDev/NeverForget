@@ -1,331 +1,394 @@
 {% load static %}
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NeverForget|home</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <link rel="stylesheet" href="{% static 'home.css' %}" />
     <link rel="stylesheet" href="{% static 'message.css' %}" />
-    <style>
+    <style></style>
+  </head>
 
-    </style>
-</head>
-
-<body>
+  <body>
     <div class="scroll-progress" id="scroll-progress"></div>
     <div class="birthday-animation" id="particles"></div>
 
     <header>
-        <nav class="container">
-            {% if messages %}
-            <div class="messages-container">
-                {% for message in messages %}
-                <div class="message {{ message.tags }}">
-                    <i class="message-icon fas fa- {{ message.tags }}"></i>
-                    <div class="message-text">{{ message }}</div>
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-            <div class="logo">
-                <i class="fas fa-birthday-cake"></i>
-                NeverForget
-            </div>
-            <div class="nav-center">
-                <span class="community-name">
-                    <i class="fas fa-users"></i>
-                    WhatsApp Family Group
-                </span>
-            </div>
-            <div class="nav-right">
-                <button class="btn-icon" onclick="toggleNotifications()">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </button>
-                <div class="user-menu">
-                    <!-- Changed: Profile picture is now inside a button to act as a toggle -->
-                    <button class="btn-icon profile-toggle" onclick="toggleProfileMenu()">
-                        <img src="{% static 'sta.jpg' %}" alt="Profile" class="profile-pic">
-                    </button>
-                    <!-- The dropdown content will be dynamically created by JavaScript -->
-                </div>
-            </div>
-        </nav>
+      <nav class="container">
+        {% if messages %}
+        <div class="messages-container">
+          {% for message in messages %}
+          <div class="message {{ message.tags }}">
+            <i class="message-icon fas fa- {{ message.tags }}"></i>
+            <div class="message-text">{{ message }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <div class="logo">
+          <i class="fas fa-birthday-cake"></i>
+          NeverForget
+        </div>
+        <div class="nav-center">
+          <span class="community-name">
+            <i class="fas fa-users"></i>
+            {{adminProfile.community_name}}
+          </span>
+        </div>
+        <div class="nav-right">
+          <button class="btn-icon" onclick="toggleNotifications()">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+          <div class="user-menu">
+            <!-- Changed: Profile picture is now inside a button to act as a toggle -->
+            <button
+              class="btn-icon profile-toggle"
+              onclick="toggleProfileMenu()"
+            >
+              <img
+                src="{% static 'sta.jpg' %}"
+                alt="Profile"
+                class="profile-pic"
+              />
+            </button>
+            <!-- The dropdown content will be dynamically created by JavaScript -->
+          </div>
+        </div>
+      </nav>
     </header>
 
     <main>
-        <!-- Quick Stats -->
-        <section class="stats-section">
-            <div class="container">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <i class="fas fa-calendar-day"></i>
-                        <div class="stat-info">
-                            <h3>2</h3>
-                            <p>This Week</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-users"></i>
-                        <div class="stat-info">
-                            <h3>{{number_of_community_members}}</h3>
-                            <p>Members</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-gift"></i>
-                        <div class="stat-info">
-                            <h3>5</h3>
-                            <p>This Month</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-heart"></i>
-                        <div class="stat-info">
-                            <h3>156</h3>
-                            <p>Celebrated</p>
-                        </div>
-                    </div>
-                </div>
+      <!-- Quick Stats -->
+      <section class="stats-section">
+        <div class="container">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <i class="fas fa-calendar-day"></i>
+              <div class="stat-info">
+                <h3>2</h3>
+                <p>This Week</p>
+              </div>
             </div>
-        </section>
+            <div class="stat-card">
+              <i class="fas fa-users"></i>
+              <div class="stat-info">
+                <h3>{{number_of_community_members}}</h3>
+                <p>Members</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-gift"></i>
+              <div class="stat-info">
+                <h3>5</h3>
+                <p>This Month</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-heart"></i>
+              <div class="stat-info">
+                <h3>156</h3>
+                <p>Celebrated</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <!-- Upcoming Birthdays -->
-        <section class="upcoming-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>
-                        <i class="fas fa-calendar-alt"></i>
-                        Upcoming Birthdays
-                    </h2>
-                    <button class="btn btn-primary" onclick="addBirthday()">
-                        <i class="fas fa-plus"></i>
-                        Add Birthday
+      <!-- Upcoming Birthdays -->
+      <section class="upcoming-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>
+              <i class="fas fa-calendar-alt"></i>
+              Upcoming Birthdays
+            </h2>
+            <button class="btn btn-primary" onclick="addBirthday()">
+              <i class="fas fa-plus"></i>
+              Add Birthday
+            </button>
+          </div>
+
+          <div class="birthday-timeline">
+            {% if todays_birthdays %} {% for b in todays_birthdays %}
+            <div class="birthday-item today">
+              <div class="birthday-date">
+                <span class="badge">Today</span>
+                <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
+              </div>
+              <div class="birthday-info">
+                <div class="person-avatar">
+                  <img src="{{ b.personImage.url }}" alt="{{ b.personName }}" />
+                </div>
+                <div class="person-details">
+                  <h3 cl>{{ b.personName }}</h3>
+                  <p>Turning {{ b.age_on_next_bday }} today! 🎉</p>
+                  <div class="birthday-actions">
+                    <button class="btn-small btn-celebrate">
+                      <i class="fas fa-heart"></i>
+                      Wish Happy Birthday
                     </button>
+                  </div>
                 </div>
-
-
-                <div class="birthday-timeline">
-                    {% if todays_birthdays %}
-                    {% for b in todays_birthdays %}
-                    <div class="birthday-item today">
-                        <div class="birthday-date">
-                            <span class="badge">Today</span>
-                            <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
-                        </div>
-                        <div class="birthday-info">
-                            <div class="person-avatar">
-                                <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
-                            </div>
-                            <div class="person-details">
-                                <h3 cl>{{ b.personName }}</h3>
-                                <p>Turning {{ b.age_on_next_bday }} today! 🎉</p>
-                                <div class="birthday-actions">
-                                    <button class="btn-small btn-celebrate">
-                                        <i class="fas fa-heart"></i>
-                                        Wish Happy Birthday
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-
-                    {% if tomorrows_birthdays %}
-                    {% for b in tomorrows_birthdays %}
-                    <div class="birthday-item tomorrow">
-                        <div class="birthday-date">
-                            <span class="badge">Tomorrow</span>
-                            <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
-                        </div>
-                        <div class="birthday-info">
-                            <div class="person-avatar">
-                                <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
-                            </div>
-                            <div class="person-details">
-                                <h3>{{ b.personName }}</h3>
-                                <p>Turning {{ b.age_on_next_bday }} tomorrow</p>
-                                <div class="birthday-actions">
-                                    <button class="btn-small btn-remind">
-                                        <i class="fas fa-bell"></i>
-                                        View
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-
-                    {% if upcoming_birthdays %}
-                    {% for b in upcoming_birthdays %}
-                    <div class="birthday-item">
-                        <div class="birthday-date">
-                            <span class="badge">Upcoming</span>
-                            <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
-                        </div>
-                        <div class="birthday-info">
-                            <div class="person-avatar">
-                                <img src="{{ b.personImage.url }}" alt="{{ b.personName }}">
-                            </div>
-                            <div class="person-details">
-                                <h3>{{ b.personName }}</h3>
-                                <p>Turning {{ b.age_on_next_bday }} in {{ b.days_until }} days</p>
-                                <div class="birthday-actions">
-                                    <button class="btn-small btn-remind">
-                                        <i class="fas fa-bell"></i>
-                                        Set Reminder
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                </div>
+              </div>
             </div>
-        </section>
-
-        <!-- Community Members -->
-        <section class="members-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>
-                        <i class="fas fa-users"></i>
-                        Community Members
-                    </h2>
-                    <div class="view-toggle">
-                        <button class="toggle-btn active" data-view="grid">
-                            <i class="fas fa-th"></i>
-                        </button>
-                        <button class="toggle-btn" data-view="list">
-                            <i class="fas fa-list"></i>
-                        </button>
-                    </div>
+            {% endfor %} 
+            {% endif %} 
+            {% if tomorrows_birthdays %} 
+            {% for b in tomorrows_birthdays %}
+            <div class="birthday-item tomorrow">
+              <div class="birthday-date">
+                <span class="badge">Tomorrow</span>
+                <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
+              </div>
+              <div class="birthday-info">
+                <div class="person-avatar">
+                  <img src="{{ b.personImage.url }}" alt="{{ b.personName }}" />
                 </div>
-
-                <div class="members-grid" id="membersContainer">
-
-                    {% for birthday in all_birthdays %}
-                    <a href="{% url 'community_member' birthday.id %}" class="member-card-link">
-                        <div class="member-card">
-                            <div class="member-avatar">
-                                <img src="{{birthday.personImage.url}}" alt="{{birthday.personName}}">
-                            </div>
-                            <div class="member-info">
-                                <h3>{{birthday.personName}}</h3>
-                                <p>{{birthday.birthDate}}</p>
-                            </div>
-                        </div>
-                    </a>
-                    {% endfor %}
+                <div class="person-details">
+                  <h3>{{ b.personName }}</h3>
+                  <p>Turning {{ b.age_on_next_bday }} tomorrow</p>
+                  <div class="birthday-actions">
+                    <button class="btn-small btn-remind">
+                      <i class="fas fa-bell"></i>
+                      View
+                    </button>
+                  </div>
                 </div>
+              </div>
             </div>
-        </section>
+            {% endfor %} 
+            {% endif %} 
+            {% if upcoming_birthdays %} 
+            {% for b in upcoming_birthdays %}
+            <div class="birthday-item">
+              <div class="birthday-date">
+                <span class="badge">Upcoming</span>
+                <span class="full-date">{{ b.birthDate|date:"F d, Y" }}</span>
+              </div>
+              <div class="birthday-info">
+                <div class="person-avatar">
+                  <img src="{{ b.personImage.url }}" alt="{{ b.personName }}" />
+                </div>
+                <div class="person-details">
+                  <h3>{{ b.personName }}</h3>
+                  <p>
+                    Turning {{ b.age_on_next_bday }} in {{ b.days_until }} days
+                  </p>
+                  <div class="birthday-actions">
+                    <button class="btn-small btn-remind">
+                      <i class="fas fa-bell"></i>
+                      Set Reminder
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %} {% endif %}
+          </div>
+        </div>
+      </section>
+
+      <!-- Community Members -->
+      <section class="members-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>
+              <i class="fas fa-users"></i>
+              Community Members
+            </h2>
+            <div class="view-toggle">
+              <button class="toggle-btn active" data-view="grid">
+                <i class="fas fa-th"></i>
+              </button>
+              <button class="toggle-btn" data-view="list">
+                <i class="fas fa-list"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="members-grid" id="membersContainer">
+            {% for birthday in all_birthdays %}
+            <a
+              href="{% url 'community_member' birthday.id %}"
+              class="member-card-link"
+            >
+              <div class="member-card">
+                <div class="member-avatar">
+                  <img
+                    src="{{birthday.personImage.url}}"
+                    alt="{{birthday.personName}}"
+                  />
+                </div>
+                <div class="member-info">
+                  <h3>{{birthday.personName}}</h3>
+                  <p>{{birthday.birthDate}}</p>
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Add Birthday Modal -->
     <div class="modal" id="addBirthdayModal">
-        {% if messages %}
-        <div class="messages-container">
-            {% for message in messages %}
-            <div class="message {{ message.tags }}">
-                <i class="message-icon fas fa- {{ message.tags }}"></i>
-                <div class="message-text">{{ message }}</div>
-            </div>
-            {% endfor %}
+      {% if messages %}
+      <div class="messages-container">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">
+          <i class="message-icon fas fa- {{ message.tags }}"></i>
+          <div class="message-text">{{ message }}</div>
         </div>
-        {% endif %}
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-plus-circle"></i> Add Birthday</h3>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
-            </div>
-            <form method="POST" id="birthday_form" class="birthday-form" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <!-- Get community user name -->
-                <input type="hidden" name="community_user_name" id="community_user_name"
-                    value="{{request.user.username}}">
-
-                <div class="form-group">
-                    <label for="personName">Name</label>
-                    <input type="text" name="personName" id="personName" placeholder="Enter full name" required>
-                </div>
-                <div class="form-group">
-                    <label for="Image">Input a clear Birthday Picture</label>
-                    <input type="file" accept="image/*" name="personImage" id="personImage" required>
-                </div>
-                <div class="form-group">
-                    <label for="birthDate">Birthday</label>
-                    <input type="date" name="birthDate" id="birthDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="phoneNumber">WhatsApp no.</label>
-                    <input type="number" name="phoneNumber" id="phoneNumber" placeholder="Enter WhatsApp no." required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" placeholder="Enter Email" required>
-                </div>
-                <div class="form-group">
-                    <label for="matric">Matric no.</label>
-                    <input type="text" name="matric" id="matric" placeholder="Enter Matric no" required>
-                </div>
-                <div class="form-group">
-                    <label for="department">Department</label>
-                    <input type="text" name="department" id="department" placeholder="Enter Department" required>
-                </div>
-                <div class="form-group">
-                    <label for="level">Level</label>
-                    <input type="number" name="level" id="level" placeholder="Enter Level" required>
-                </div>
-                <div class="form-group">
-                    <label for="gender">Gender</label>
-                    <select name="gender" id="gender">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="trainClassLevel">Level in Training Clas</label>
-                    <select name="trainingLevel" id="trainingLevel">
-                        <option value="baptisimal">Baptisimal</option>
-                        <option value="believers">Believers</option>
-                        <option value="workers-in-training">Workers In Training</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="reminderDays">Remind me</label>
-                    <select name="reminderDays" id="reminderDays">
-                        <option value="1">1 day before</option>
-                        <option value="3">3 days before</option>
-                        <option value="7">1 week before</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Birthday</button>
-                </div>
-            </form>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-plus-circle"></i> Add Birthday</h3>
+          <button class="close-btn" onclick="closeModal()">&times;</button>
         </div>
+        <form
+          method="POST"
+          id="birthday_form"
+          class="birthday-form"
+          enctype="multipart/form-data"
+        >
+          {% csrf_token %}
+
+          <!-- Get community user name -->
+          <input
+            type="hidden"
+            name="community_user_name"
+            id="community_user_name"
+            value="{{request.user.username}}"
+          />
+
+          <div class="form-group">
+            <label for="personName">Name</label>
+            <input
+              type="text"
+              name="personName"
+              id="personName"
+              placeholder="Enter full name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="Image">Input a clear Birthday Picture</label>
+            <input
+              type="file"
+              accept="image/*"
+              name="personImage"
+              id="personImage"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="birthDate">Birthday</label>
+            <input type="date" name="birthDate" id="birthDate" required />
+          </div>
+          <div class="form-group">
+            <label for="phoneNumber">WhatsApp no.</label>
+            <input
+              type="number"
+              name="phoneNumber"
+              id="phoneNumber"
+              placeholder="Enter WhatsApp no."
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter Email"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="matric">Matric no.</label>
+            <input
+              type="text"
+              name="matric"
+              id="matric"
+              placeholder="Enter Matric no"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="department">Department</label>
+            <input
+              type="text"
+              name="department"
+              id="department"
+              placeholder="Enter Department"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="level">Level</label>
+            <input
+              type="number"
+              name="level"
+              id="level"
+              placeholder="Enter Level"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select name="gender" id="gender">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="trainClassLevel">Level in Training Clas</label>
+            <select name="trainingLevel" id="trainingLevel">
+              <option value="baptisimal">Baptisimal</option>
+              <option value="believers">Believers</option>
+              <option value="workers-in-training">Workers In Training</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="reminderDays">Remind me</label>
+            <select name="reminderDays" id="reminderDays">
+              <option value="1">1 day before</option>
+              <option value="3">3 days before</option>
+              <option value="7">1 week before</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeModal()"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">Add Birthday</button>
+          </div>
+        </form>
+      </div>
     </div>
-
 
     <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>
     <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'assets/js/uikit.js' %}"></script>
     <script src="{% static 'assets/js/simplebar.js' %}"></script>
     <script src="{% static 'assets/js/custom.js' %}"></script>
-    <script src="{% static 'home.js' %}">
-    </script>
+    <script src="{% static 'home.js' %}"></script>
     <script src="{% static 'addbirthday.js' %}"></script>
     <script src="{% static 'message.js' %}"></script>
-</body>
-
+  </body>
 </html>

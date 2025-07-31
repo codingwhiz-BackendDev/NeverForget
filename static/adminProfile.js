@@ -110,22 +110,27 @@ function changeProfilePhoto() {
 }
 
 function shareProfile() {
+     
+    const username = document.getElementById('admin-data').dataset.username;
+
+    const profileUrl = `${window.location.origin}/profile/${username}`;
+
     if (navigator.share) {
         navigator.share({
             title: 'NeverForget - Admin Profile',
             text: 'Check out my admin profile on NeverForget!',
-            url: window.location.href
+            url: profileUrl
         });
     } else {
-        // Fallback for browsers that don't support Web Share API
-        navigator.clipboard.writeText(window.location.href).then(() => {
+        navigator.clipboard.writeText(profileUrl).then(() => {
             showToast("Profile link copied to clipboard!", "success");
         });
     }
 }
 
+
 function goHome() {
-    window.location.href = "index.html"; // Adjust path as needed
+    window.location.href = "/home"; 
 }
 
 // Dashboard Functions
@@ -169,30 +174,9 @@ function sendReminders() {
         showToast("Reminders sent to 12 members!", "success");
     }, 2000);
 }
+ 
 
-function exportData() {
-    showToast("Preparing data export...", "info");
-    
-    // Simulate data export
-    setTimeout(() => {
-        showToast("Data exported successfully!", "success");
-        
-        // Create and download a sample CSV file
-        const csvContent = "Name,Email,Birthday\nJohn Doe,john@example.com,1990-01-15\nJane Smith,jane@example.com,1985-03-22";
-        const blob = new Blob([csvContent], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'community_data.csv';
-        a.click();
-        window.URL.revokeObjectURL(url);
-    }, 1500);
-}
-
-function manageSettings() {
-    showToast("Opening settings panel...", "info");
-    // In a real app, this would open a settings modal or navigate to settings page
-}
+ 
 
 function editPersonalInfo() {
     editProfile(); // Reuse the edit profile modal
@@ -307,12 +291,9 @@ function showProfilePanel() {
                 <button onclick="this.parentElement.parentElement.remove()" class="close-btn">&times;</button>
             </div>
             <div class="profile-list">
-                <a href="#" onclick="editProfile()"><i class="fas fa-user-edit"></i> Edit Profile</a>
-                <a href="#" onclick="manageSettings()"><i class="fas fa-cog"></i> Admin Settings</a>
-                <a href="#" onclick="exportData()"><i class="fas fa-download"></i> Export Data</a>
-                <a href="#" onclick="viewAnalytics()"><i class="fas fa-chart-bar"></i> Analytics</a>
+                <a href="#" onclick="editProfile()"><i class="fas fa-user-edit"></i> Edit Profile</a>  
                 <a href="#" onclick="shareProfile()"><i class="fas fa-share-alt"></i> Share Profile</a>
-                <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         `;
         document.body.appendChild(panel);
@@ -331,19 +312,9 @@ function showProfilePanel() {
         }
     }
 }
+ 
 
-function viewAnalytics() {
-    showToast("Opening analytics dashboard...", "info");
-}
-
-function logout() {
-    if (confirm("Are you sure you want to logout?")) {
-        showToast("Logging out...", "info");
-        setTimeout(() => {
-            window.location.href = "login.html"; // Adjust path as needed
-        }, 1500);
-    }
-}
+ 
 
 // Utility Functions
 function showToast(message, type = "info") {
@@ -391,42 +362,42 @@ function animateNumber(element, start, end) {
     requestAnimationFrame(updateNumber);
 }
 
-// Form Handling
-document.addEventListener("DOMContentLoaded", function() {
-    const editForm = document.getElementById("editProfileForm");
-    if (editForm) {
-        editForm.addEventListener("submit", function(e) {
-            e.preventDefault();
+// // Form Handling
+// document.addEventListener("DOMContentLoaded", function() {
+//     const editForm = document.getElementById("editProfileForm");
+//     if (editForm) {
+//         editForm.addEventListener("submit", function(e) {
+//             e.preventDefault();
             
-            // Get form data
-            const formData = new FormData(editForm);
-            const fullName = formData.get("editFullName") || document.getElementById("editFullName").value;
-            const email = formData.get("editEmail") || document.getElementById("editEmail").value;
-            const phone = formData.get("editPhone") || document.getElementById("editPhone").value;
-            const birthday = formData.get("editBirthday") || document.getElementById("editBirthday").value;
-            const timezone = formData.get("editTimezone") || document.getElementById("editTimezone").value;
+//             // Get form data
+//             const formData = new FormData(editForm);
+//             const fullName = formData.get("editFullName") || document.getElementById("editFullName").value;
+//             const email = formData.get("editEmail") || document.getElementById("editEmail").value;
+//             const phone = formData.get("editPhone") || document.getElementById("editPhone").value;
+//             const birthday = formData.get("editBirthday") || document.getElementById("editBirthday").value;
+//             const timezone = formData.get("editTimezone") || document.getElementById("editTimezone").value;
             
-            // Update profile information
-            document.getElementById("profileName").textContent = fullName;
-            document.getElementById("fullName").textContent = fullName;
-            document.getElementById("emailAddress").textContent = email;
-            document.getElementById("phoneNumber").textContent = phone;
+//             // Update profile information
+//             document.getElementById("profileName").textContent = fullName;
+//             document.getElementById("fullName").textContent = fullName;
+//             document.getElementById("emailAddress").textContent = email;
+//             document.getElementById("phoneNumber").textContent = phone;
             
-            // Format and update birthday
-            if (birthday) {
-                const date = new Date(birthday);
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                document.getElementById("birthday").textContent = date.toLocaleDateString('en-US', options);
-            }
+//             // Format and update birthday
+//             if (birthday) {
+//                 const date = new Date(birthday);
+//                 const options = { year: 'numeric', month: 'long', day: 'numeric' };
+//                 document.getElementById("birthday").textContent = date.toLocaleDateString('en-US', options);
+//             }
             
-            document.getElementById("timeZone").textContent = timezone;
+//             document.getElementById("timeZone").textContent = timezone;
             
-            // Close modal and show success message
-            closeModal("editProfileModal");
-            showToast("Profile updated successfully!", "success");
-        });
-    }
-});
+//             // Close modal and show success message
+//             closeModal("editProfileModal");
+//             showToast("Profile updated successfully!", "success");
+//         });
+//     }
+// });
 
 // Performance optimization - throttle scroll events
 function throttle(func, limit) {

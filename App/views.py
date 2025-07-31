@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth 
-from django.http import HttpResponse
-from .models import BirthdayInfo
+from django.http import HttpResponse,JsonResponse
+from .models import BirthdayInfo, AdminProfile
 from django.core.files.storage import FileSystemStorage
 from datetime import date, timedelta
 from django.contrib.auth.decorators import login_required
@@ -14,8 +14,13 @@ def calculate_age(born, ref_date):
 def index(request):
     return render(request, 'index.html')
 
-
+@login_required(login_url='login')
 def home(request):
+    
+    user_obj = User.objects.get(username=request.user)
+    adminProfile = AdminProfile.objects.get(user=user_obj)
+    
+    
     today = date.today()
     all_birthdays = BirthdayInfo.objects.filter(community_user_name=request.user)
     number_of_community_members = len(all_birthdays)
@@ -58,7 +63,8 @@ def home(request):
         'tomorrows_birthdays': tomorrows_birthdays,
         'upcoming_birthdays': upcoming_birthdays,
         'all_birthdays':all_birthdays,
-        'number_of_community_members':number_of_community_members
+        'number_of_community_members':number_of_community_members,
+        'adminProfile':adminProfile
     }
     return render(request, 'home.html', context)
 
@@ -82,6 +88,9 @@ def register(request):
                     password=password
                 )
                 user.save()
+                user_obj = User.objects.get(username=username)
+                admin_user = AdminProfile.objects.create(user=user_obj)
+                admin_user.save()
                 messages.success(request, 'Successfully Registered')
                 return redirect('login')
         else:
@@ -113,6 +122,7 @@ def logout(request):
     return redirect('/')
 
 
+@login_required(login_url='login')
 def addBirthday(request):
     if request.method == 'POST':
         get_user = request.user
@@ -153,7 +163,7 @@ def addBirthday(request):
 def search_community(request):
     return render(request, 'search_community.html')
  
-
+@login_required(login_url='login')
 def community_member(request, pk):
     member = get_object_or_404(BirthdayInfo, pk=pk)
     if request.method == 'POST':
@@ -182,6 +192,47 @@ def community_member(request, pk):
         return redirect('community_member', pk=member.pk)
     return render(request, 'community_member.html', {'member': member})
  
-
+@login_required(login_url='login')
 def profile(request):
-    return render(request, 'adminProfile.html')
+    user_obj = User.objects.get(username=request.user)
+    adminProfile = AdminProfile.objects.get(user=user_obj)
+    
+    all_birthdays = BirthdayInfo.objects.filter(community_user_name=user_obj)
+    number_of_community_members = len(all_birthdays) 
+    context ={
+        'adminProfile':adminProfile,
+        'number_of_community_members':number_of_community_members,
+    }
+    return render(request, 'adminProfile.html', context)
+
+
+@login_required(login_url='login')
+def editAdminProfile(request):
+    if request.method == 'POST':
+        user = request.user
+        community_name = request.POST.get('community_name') 
+        phone_number = request.POST.get('phoneNumber')
+        birthday = request.POST.get('birthday')
+        admin_image = request.FILES.get('profile_image')
+
+        try:
+            profile = AdminProfile.objects.get(user=user)
+            profile.community_name = community_name
+            profile.phone_number = phone_number
+            profile.birthday = birthday
+            if admin_image:
+                profile.adminImage = admin_image
+            profile.save()
+            return JsonResponse({'message': 'Profile updated successfully.'})
+        except AdminProfile.DoesNotExist:
+            AdminProfile.objects.create(
+                user=user,
+                community_name=community_name,
+                phone_number=phone_number,
+                birthday=birthday,
+                adminImage=admin_image,
+                email=user.email  # Required field
+            )
+            return JsonResponse({'message': 'Profile created successfully.'})
+    
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)

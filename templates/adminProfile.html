@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{% static 'adminProfile.css' %}" />
   </head>
   <body>
+    <div id="admin-data" data-username="{{ adminProfile.user }}"></div>
+
     <div class="scroll-progress" id="scroll-progress"></div>
     <div class="birthday-animation" id="particles"></div>
 
@@ -42,7 +44,7 @@
               onclick="toggleProfileMenu()"
             >
               <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+                src="{{adminProfile.adminImage.url}}"
                 alt="Profile"
                 class="profile-pic"
               />
@@ -61,16 +63,11 @@
               <div class="profile-avatar-container">
                 <div class="profile-avatar">
                   <img
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face"
+                    src="{{adminProfile.adminImage.url}}"
                     alt="Admin Profile"
                     id="profileImage"
                   />
-                  <button
-                    class="change-photo-btn"
-                    onclick="changeProfilePhoto()"
-                  >
-                    <i class="fas fa-camera"></i>
-                  </button>
+                   
                 </div>
                 <div class="admin-badge">
                   <i class="fas fa-crown"></i>
@@ -79,12 +76,11 @@
               </div>
             </div>
             <div class="profile-info">
-              <h1 class="profile-name" id="profileName">John Anderson</h1>
-              <p class="profile-title">Community Administrator</p>
-              <p class="profile-email">john.anderson@neverforget.com</p>
+              <h1 class="profile-name" id="profileName">{{adminProfile.user}}</h1> 
+              <p class="profile-email">{{adminProfile.email}}</p>
               <div class="profile-stats">
                 <div class="stat-item">
-                  <span class="stat-number">156</span>
+                  <span class="stat-number">{{number_of_community_members}}</span>
                   <span class="stat-label">Members</span>
                 </div>
                 <div class="stat-item">
@@ -271,115 +267,207 @@
           </div>
         </div>
       </section>
-
-      <!-- Personal Information Section -->
-      <section class="personal-info-section">
-        <div class="container">
-          <div class="section-header">
-            <h2><i class="fas fa-user"></i> Personal Information</h2>
-            <button class="btn btn-primary" onclick="editPersonalInfo()">
-              <i class="fas fa-edit"></i>
-              Edit Information
-            </button>
-          </div>
-          <div class="info-grid">
-            <div class="info-card">
-              <div class="info-item">
-                <label>Full Name</label>
-                <span id="fullName">John Anderson</span>
-              </div>
-              <div class="info-item">
-                <label>Email Address</label>
-                <span id="emailAddress">john.anderson@neverforget.com</span>
-              </div>
-              <div class="info-item">
-                <label>Phone Number</label>
-                <span id="phoneNumber">+1 (555) 123-4567</span>
-              </div>
-            </div>
-            <div class="info-card">
-              <div class="info-item">
-                <label>Birthday</label>
-                <span id="birthday">March 15, 1985</span>
-              </div>
-              <div class="info-item">
-                <label>Join Date</label>
-                <span id="joinDate">September 12, 2021</span>
-              </div>
-              <div class="info-item">
-                <label>Time Zone</label>
-                <span id="timeZone">UTC-5 (Eastern Time)</span>
-              </div>
-            </div>
-          </div>
+<!-- Add Birthday Modal (existing, no changes needed for this request) -->
+<div class="modal" id="addBirthdayModal">
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">
+            <i class="message-icon fas fa- {{ message.tags }}"></i>
+            <div class="message-text">{{ message }}</div>
         </div>
-      </section>
-    </main>
-
-    <!-- Edit Profile Modal -->
-    <div class="modal" id="editProfileModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-edit"></i> Edit Profile</h3>
-          <button class="close-btn" onclick="closeModal('editProfileModal')">
-            &times;
-          </button>
-        </div>
-        <form class="edit-form" id="editProfileForm">
-          <div class="form-group">
-            <label for="editFullName">Full Name</label>
-            <input
-              type="text"
-              id="editFullName"
-              value="John Anderson"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="editEmail">Email Address</label>
-            <input
-              type="email"
-              id="editEmail"
-              value="john.anderson@neverforget.com"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="editPhone">Phone Number</label>
-            <input
-              type="tel"
-              id="editPhone"
-              value="+1 (555) 123-4567"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="editBirthday">Birthday</label>
-            <input type="date" id="editBirthday" value="1985-03-15" required />
-          </div>
-          <div class="form-group">
-            <label for="editTimezone">Time Zone</label>
-            <select id="editTimezone">
-              <option value="UTC-5">UTC-5 (Eastern Time)</option>
-              <option value="UTC-6">UTC-6 (Central Time)</option>
-              <option value="UTC-7">UTC-7 (Mountain Time)</option>
-              <option value="UTC-8">UTC-8 (Pacific Time)</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              onclick="closeModal('editProfileModal')"
-            >
-              Cancel
-            </button>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-          </div>
-        </form>
-      </div>
+        {% endfor %}
     </div>
+    {% endif %}
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-plus-circle"></i> Add Birthday</h3>
+            <button class="close-btn" onclick="closeModal('addBirthdayModal')">&times;</button>
+        </div>
+        <form method="POST" id="birthday_form" class="birthday-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Get community user name -->
+            <input type="hidden" name="community_user_name" id="community_user_name"
+                value="{{request.user.username}}">
+            <div class="form-group">
+                <label for="personName">Name</label>
+                <input type="text" name="personName" id="personName" placeholder="Enter full name" required>
+            </div>
+            <div class="form-group">
+                <label for="Image">Input a clear Birthday Picture</label>
+                <input type="file" accept="image/*" name="personImage" id="personImage" required>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Birthday</label>
+                <input type="date" name="birthDate" id="birthDate" required>
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">WhatsApp no.</label>
+                <input type="number" name="phoneNumber" id="phoneNumber" placeholder="Enter WhatsApp no." required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="Enter Email" required>
+            </div>
+            <div class="form-group">
+                <label for="matric">Matric no.</label>
+                <input type="text" name="matric" id="matric" placeholder="Enter Matric no" required>
+            </div>
+            <div class="form-group">
+                <label for="department">Department</label>
+                <input type="text" name="department" id="department" placeholder="Enter Department" required>
+            </div>
+            <div class="form-group">
+                <label for="level">Level</label>
+                <input type="number" name="level" id="level" placeholder="Enter Level" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select name="gender" id="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="trainClassLevel">Level in Training Clas</label>
+                <select name="trainingLevel" id="trainingLevel">
+                    <option value="baptisimal">Baptisimal</option>
+                    <option value="believers">Believers</option>
+                    <option value="workers-in-training">Workers In Training</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="reminderDays">Remind me</label>
+                <select name="reminderDays" id="reminderDays">
+                    <option value="1">1 day before</option>
+                    <option value="3">3 days before</option>
+                    <option value="7">1 week before</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addBirthdayModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Add Birthday</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<main>
+   <!-- Personal Information Section -->
+<section class="personal-info-section">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-user"></i> Personal Information</h2>
+            {% comment %} <button class="btn btn-primary" onclick="openEditProfileModal()">
+                <i class="fas fa-edit"></i>
+                Edit Information
+            </button> {% endcomment %}
+        </div>
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-item">
+                    <label>Full Name</label>
+                    <span id="fullName">{{ adminProfile.user|default:"N/A" }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Email Address</label>
+                    <span id="emailAddress">{{ adminProfile.email|default:"N/A" }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Phone Number</label>
+                    <span id="phoneNumber">{{ adminProfile.phone_number|default:"N/A" }}</span>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-item">
+                    <label>Birthday</label>
+                    <span id="birthday">{{ adminProfile.birthday|date:"F d, Y"|default:"N/A" }}</span>
+                </div>
+                 
+                 
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+
+<!-- Edit Profile Modal -->
+<div class="modal" id="editProfileModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-edit"></i> Edit Profile</h3>
+            <button class="close-btn" onclick="closeModal('editProfileModal')">&times;</button>
+        </div>
+        <form class="edit-form" id="editProfileForm" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="editImage">Profile Image</label>
+                <input
+                    type="file"
+                    id="editImage"
+                    name="profile_image"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="editFullName">Full Name</label>
+                <input
+                    type="text"
+                    id="editFullName"
+                    name="community_name"
+                    value="{{ admin_profile.full_name|default:"" }}"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="editPhone">Phone Number</label>
+                <input
+                    type="tel"
+                    id="editPhone"
+                    name="phoneNumber"
+                    value="{{ admin_profile.phone_number|default:"" }}"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="editBirthday">Birthday</label>
+                <input
+                    type="date"
+                    id="editBirthday"
+                    name="birthday"
+                    value="{{ admin_profile.birthday|date:"Y-m-d"|default:"" }}"
+                    required
+                />
+            </div>
+
+            <div class="form-actions">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="closeModal('editProfileModal')"
+                >
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/uikit.js' %}"></script>
+    <script src="{% static 'assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
 
     <script src="{% static 'adminProfile.js' %}"></script>
+    <script src="{% static 'editAdminProfile.js' %}"></script>
   </body>
 </html>
