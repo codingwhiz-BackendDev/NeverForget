@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from .models import BirthdayInfo
 from django.core.files.storage import FileSystemStorage
 from datetime import date, timedelta
+from django.contrib.auth.decorators import login_required
+
 
 def calculate_age(born, ref_date):
     return ref_date.year - born.year - ((ref_date.month, ref_date.day) < (born.month, born.day))
@@ -12,9 +14,11 @@ def calculate_age(born, ref_date):
 def index(request):
     return render(request, 'index.html')
 
+
 def home(request):
     today = date.today()
     all_birthdays = BirthdayInfo.objects.filter(community_user_name=request.user)
+    number_of_community_members = len(all_birthdays)
     
     todays_birthdays = []
     tomorrows_birthdays = []
@@ -53,7 +57,8 @@ def home(request):
         'todays_birthdays': todays_birthdays,
         'tomorrows_birthdays': tomorrows_birthdays,
         'upcoming_birthdays': upcoming_birthdays,
-        'all_birthdays':all_birthdays
+        'all_birthdays':all_birthdays,
+        'number_of_community_members':number_of_community_members
     }
     return render(request, 'home.html', context)
 
@@ -178,3 +183,5 @@ def community_member(request, pk):
     return render(request, 'community_member.html', {'member': member})
  
 
+def profile(request):
+    return render(request, 'adminProfile.html')

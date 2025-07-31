@@ -132,6 +132,7 @@ function validateField(field) {
 // Enhanced edit/save functionality
 function initializeProfileForm() {
   const editBtn = document.getElementById("editBtn")
+  const cancelBtn = document.getElementById("cancelBtn")
   const saveBtn = document.getElementById("saveBtn")
   const form = document.getElementById("profileForm")
   const inputs = form.querySelectorAll("input, select")
@@ -170,6 +171,7 @@ function initializeProfileForm() {
     editBtn.innerHTML = '<i class="fas fa-times"></i> Cancel'
     editBtn.style.background = "linear-gradient(45deg, #ff6b6b, #ff4757)"
     saveBtn.style.display = "inline-flex"
+    cancelBtn.style.display = 'none'
 
     // Add real-time validation
     inputs.forEach((input) => {

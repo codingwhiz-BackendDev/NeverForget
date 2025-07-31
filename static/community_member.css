@@ -254,6 +254,12 @@ select option {
     left: 100%;
 }
 
+#cancelBtn{
+    background: linear-gradient(45deg, #ff6b6b, #ffa500, #ff1493);
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
 #editBtn {
     background: linear-gradient(45deg, #ff6b6b, #ffa500, #ff1493);
     color: white;
