@@ -108,7 +108,7 @@ function changeProfilePhoto() {
     fileInput.click();
     document.body.removeChild(fileInput);
 }
-
+ 
 function shareProfile() {
      
     const username = document.getElementById('admin-data').dataset.username;

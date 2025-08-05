@@ -11,4 +11,5 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('community_member/<int:pk>/', views.community_member, name='community_member'),
     path('editAdminProfile', views.editAdminProfile, name = 'editAdminProfile'),
+    path('profile/<str:pk>/', views.formLink , name = 'formLink')
 ]

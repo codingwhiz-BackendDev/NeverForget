@@ -236,3 +236,55 @@ def editAdminProfile(request):
             return JsonResponse({'message': 'Profile created successfully.'})
     
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+
+def formLink(request, pk):
+    user = User.objects.get(username=pk)
+    community_user_name = user
+    
+    if request.method == 'POST':
+        personName = request.POST.get('personName')
+        birthDate = request.POST.get('birthDate')
+        phoneNumber = request.POST.get('phoneNumber')
+        email = request.POST.get('email')
+        matric = request.POST.get('matric')
+        department = request.POST.get('department')
+        level = request.POST.get('level')
+        gender = request.POST.get('gender')
+        trainingLevel = request.POST.get('trainingLevel')
+        reminderDays = request.POST.get('reminderDays')
+        
+        personImage = request.FILES.get('personImage')
+        
+        try:
+            BirthdayInfo.objects.create(
+                community_user_name=community_user_name,
+                personName=personName,
+                birthDate=birthDate,
+                phoneNumber=phoneNumber,
+                email=email,
+                matric=matric,
+                department=department,
+                level=level,
+                personImage=personImage,
+                gender=gender,
+                trainingLevel=trainingLevel,
+                reminderDays=reminderDays
+            )
+            
+            # For AJAX requests, return JSON
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'message': f'{personName} successfully added'})
+            
+            # For regular form submissions
+            messages.success(request, f"{personName} successfully added")
+            
+        except Exception as e:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': str(e)})
+    
+    # This handles GET requests (when the page is first loaded)
+    context = {
+        'community_user_name': community_user_name
+    }
+    return render(request, 'formLink.html', context)  # REMOVED THE COMMA!
