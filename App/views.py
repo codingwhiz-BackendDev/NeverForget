@@ -274,6 +274,7 @@ def formLink(request, pk):
             
             # For AJAX requests, return JSON
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                messages.success(request, f"{personName} successfully added")
                 return JsonResponse({'success': True, 'message': f'{personName} successfully added'})
             
             # For regular form submissions

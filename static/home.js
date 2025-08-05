@@ -154,7 +154,7 @@
                         </div>
                         <div class="profile-list">
                             <a href="/profile"><i class="fas fa-user"></i> Profile</a> 
-                            <a href="#"><i class="fas fa-share-alt"></i> Share Link</a>
+                            <a href="#" onclick="shareProfile()"><i class="fas fa-share-alt"></i> Share Link</a>
                             <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                         </div>
                     `;
@@ -191,7 +191,7 @@ function showProfilePanel() {
             </div>
             <div class="profile-list">
                 <a href="/profile"><i class="fas fa-user"></i> Profile</a> 
-                <a href="#"><i class="fas fa-share-alt"></i> Share Link</a>
+                <a href="#" onclick="shareProfile()"><i class="fas fa-share-alt"></i> Share Link</a>
                 <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         `;
@@ -687,3 +687,23 @@ function showNotificationPanel() {
                     konamiCode = []
                 }
             })
+
+
+            function shareProfile() {
+     
+    const username = document.getElementById('admin-data').dataset.username;
+
+    const profileUrl = `${window.location.origin}/profile/${username}`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: 'NeverForget - Admin Profile',
+            text: 'Check out my admin profile on NeverForget!',
+            url: profileUrl
+        });
+    } else {
+        navigator.clipboard.writeText(profileUrl).then(() => {
+            showToast("Profile link copied to clipboard!", "success");
+        });
+    }
+}
