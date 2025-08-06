@@ -21,7 +21,7 @@ class BirthdayInfo(models.Model):
     personName = models.CharField(max_length=50)
     personImage = models.ImageField(upload_to='Birthday Images', null=True, blank=True)
     birthDate = models.DateField(auto_now=False, auto_now_add=False) 
-    phoneNumber = models.IntegerField()
+    phoneNumber = models.CharField(max_length=15)
     email = models.EmailField(max_length=254)
     matric =  models.CharField(max_length=50)
     department =  models.CharField(max_length=50)
