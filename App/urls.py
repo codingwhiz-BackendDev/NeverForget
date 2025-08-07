@@ -16,6 +16,9 @@ urlpatterns = [
     # PWA URLs
     path('api/push-subscription/', views.push_subscription, name='push_subscription'),
     path('api/send-birthday-notification/', views.send_birthday_notification, name='send_birthday_notification'),
+    path('api/notification-preferences/', views.notification_preferences, name='notification_preferences'),
+    path('api/notification-logs/', views.notification_logs, name='notification_logs'),
+    path('api/trigger-birthday-notifications/', views.trigger_birthday_notifications, name='trigger_birthday_notifications'),
     path('offline/', views.offline_page, name='offline_page'),
     path('sw.js', views.service_worker, name='service_worker'),
     path('manifest.json', views.manifest, name='manifest'),

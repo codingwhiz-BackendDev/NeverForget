@@ -60,26 +60,31 @@ class PWAManager {
   }
 
   // Setup push notifications
-  async setupPushNotifications() {
-    if (!this.registration) return;
+async setupPushNotifications() {
+  if (!this.registration) return;
 
-    try {
-      const subscription = await this.registration.pushManager.getSubscription();
-      
-      if (!subscription) {
-        // Subscribe to push notifications
-        const newSubscription = await this.registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: this.urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY') // Replace with your VAPID key
-        });
+  const vapidPublicKey = window.VAPID_PUBLIC_KEY;;
 
-        // Send subscription to server
-        await this.sendSubscriptionToServer(newSubscription);
-      }
-    } catch (error) {
-      console.error('Push notification setup failed:', error);
+  try {
+    const subscription = await this.registration.pushManager.getSubscription();
+    
+    if (!subscription) {
+      const convertedKey = this.urlBase64ToUint8Array(vapidPublicKey);
+      const newSubscription = await this.registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedKey
+      });
+
+      await this.sendSubscriptionToServer(newSubscription);
+      console.log('Push subscription successful');
+    } else {
+      console.log('Already subscribed to push notifications');
     }
+  } catch (error) {
+    console.error('Push notification setup failed:', error);
   }
+}
+
 
   // Convert VAPID key
   urlBase64ToUint8Array(base64String) {

@@ -44,3 +44,86 @@ class AdminProfile(models.Model):
     
     def __str__(self):
         return str(self.community_name)
+
+
+class PushSubscription(models.Model):
+    """
+    Model to store push notification subscriptions for PWA
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='push_subscriptions')
+    endpoint = models.URLField(max_length=500, help_text="Browser's push service URL")
+    p256dh_key = models.CharField(max_length=255, help_text="P-256 DH key for encryption")
+    auth_key = models.CharField(max_length=255, help_text="Authentication key")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True, help_text="Whether this subscription is active")
+    
+    class Meta:
+        unique_together = ['user', 'endpoint']
+        verbose_name = "Push Subscription"
+        verbose_name_plural = "Push Subscriptions"
+    
+    def __str__(self):
+        return f"Push Subscription for {self.user.username}"
+
+
+class NotificationPreference(models.Model):
+    """
+    Model to store user notification preferences
+    """
+    REMINDER_CHOICES = (
+        (1, '1 day before'),
+        (3, '3 days before'),
+        (7, '1 week before'),
+    )
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='notification_preference')
+    birthday_notifications = models.BooleanField(default=True, help_text="Enable birthday notifications")
+    reminder_days = models.IntegerField(choices=REMINDER_CHOICES, default=1, help_text="Days before birthday to send reminder")
+    notification_time = models.TimeField(default='09:00', help_text="Time to send notifications")
+    email_notifications = models.BooleanField(default=True, help_text="Enable email notifications")
+    push_notifications = models.BooleanField(default=True, help_text="Enable push notifications")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = "Notification Preference"
+        verbose_name_plural = "Notification Preferences"
+    
+    def __str__(self):
+        return f"Notification Preferences for {self.user.username}"
+
+
+class NotificationLog(models.Model):
+    """
+    Model to log sent notifications for tracking and debugging
+    """
+    NOTIFICATION_TYPES = (
+        ('birthday', 'Birthday Notification'),
+        ('reminder', 'Birthday Reminder'),
+        ('welcome', 'Welcome Notification'),
+    )
+    
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('sent', 'Sent'),
+        ('failed', 'Failed'),
+        ('delivered', 'Delivered'),
+    )
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notification_logs')
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    sent_at = models.DateTimeField(auto_now_add=True)
+    delivered_at = models.DateTimeField(null=True, blank=True)
+    error_message = models.TextField(blank=True, null=True)
+    
+    class Meta:
+        verbose_name = "Notification Log"
+        verbose_name_plural = "Notification Logs"
+        ordering = ['-sent_at']
+    
+    def __str__(self):
+        return f"{self.notification_type} for {self.user.username} - {self.status}"

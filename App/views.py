@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth 
 from django.http import HttpResponse,JsonResponse
-from .models import BirthdayInfo, AdminProfile
+from .models import BirthdayInfo, AdminProfile, PushSubscription, NotificationPreference, NotificationLog
 from django.core.files.storage import FileSystemStorage
 from datetime import date, timedelta
 from django.contrib.auth.decorators import login_required
@@ -10,13 +10,121 @@ from django.db.models import Q
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-
-
+from django.utils import timezone 
+from django.conf import settings
+import re
+import base64
 def calculate_age(born, ref_date):
     return ref_date.year - born.year - ((ref_date.month, ref_date.day) < (born.month, born.day))
 
+
+def send_push_notification_to_user(user, title, message, notification_type='birthday'):
+    """
+    Send push notification to a specific user using pywebpush
+    """
+    try:
+        from pywebpush import webpush, WebPushException
+        
+        
+        # Get user's active subscriptions
+        subscriptions = PushSubscription.objects.filter(user=user, is_active=True)
+        
+        if not subscriptions.exists():
+            return False, "No active subscriptions found"
+        
+        # Get VAPID keys from settings
+        vapid_private_key = getattr(settings, 'VAPID_PRIVATE_KEY', None)
+        vapid_claims = getattr(settings, 'VAPID_CLAIMS', {
+            'sub': 'mailto:admin@neverforget.com'
+        })
+        
+        if not vapid_private_key or vapid_private_key == 'YOUR_VAPID_PRIVATE_KEY_HERE':
+            return False, "VAPID_PRIVATE_KEY not configured in settings"
+        
+        # Log the notification attempt
+        notification_log = NotificationLog.objects.create(
+            user=user,
+            notification_type=notification_type,
+            title=title,
+            message=message,
+            status='pending'
+        )
+        
+        success_count = 0
+        for subscription in subscriptions:
+            try:
+                # Prepare subscription info for pywebpush
+                subscription_info = {
+                    'endpoint': subscription.endpoint,
+                    'keys': {
+                        'p256dh': subscription.p256dh_key,
+                        'auth': subscription.auth_key
+                    }
+                }
+                
+                # Prepare notification data
+                notification_data = {
+                    'title': title,
+                    'message': message,
+                    'icon': '/static/icons/icon-192x192.png',
+                    'badge': '/static/icons/icon-192x192.png',
+                    'tag': 'birthday-notification',
+                    'data': {
+                        'url': '/home',
+                        'type': 'birthday'
+                    }
+                }
+                
+                # Send push notification
+                response = webpush(
+                    subscription_info=subscription_info,
+                    data=json.dumps(notification_data),
+                    vapid_private_key=vapid_private_key,
+                    vapid_claims=vapid_claims
+                )
+                
+                if response.status_code == 200:
+                    success_count += 1
+                    
+            except WebPushException as e:
+                # Mark subscription as inactive if it's invalid
+                if '410' in str(e) or '404' in str(e):
+                    subscription.is_active = False
+                    subscription.save()
+            except Exception as e:
+                print(f"Error sending to subscription {subscription.id}: {str(e)}")
+        
+        # Update notification log
+        if success_count > 0:
+            notification_log.status = 'sent'
+            notification_log.delivered_at = timezone.now()
+            notification_log.save()
+            return True, f"Notification sent successfully to {success_count} device(s)"
+        else:
+            notification_log.status = 'failed'
+            notification_log.error_message = 'No successful deliveries'
+            notification_log.save()
+            return False, "No successful deliveries"
+        
+    except ImportError:
+        return False, "pywebpush library not installed. Run: pip install pywebpush"
+    except Exception as e:
+        return False, str(e)
+
 def index(request):
     return render(request, 'index.html')
+
+def pem_to_base64url(pem_key):
+    """
+    Convert a PEM-encoded EC public key to base64url format without padding.
+    """
+    # Remove header/footer
+    key = re.sub(r"-----.*?-----", "", pem_key, flags=re.DOTALL)
+    key = key.strip().replace("\n", "")
+    # Decode PEM base64 → raw bytes
+    key_bytes = base64.b64decode(key)
+    # Encode raw bytes → base64url (no padding)
+    return base64.urlsafe_b64encode(key_bytes).decode('utf-8').rstrip("=")
 
 @login_required(login_url='login')
 def home(request):
@@ -68,8 +176,10 @@ def home(request):
         'upcoming_birthdays': upcoming_birthdays,
         'all_birthdays':all_birthdays,
         'number_of_community_members':number_of_community_members,
-        'adminProfile':adminProfile
+        'adminProfile':adminProfile,
+        "vapid_public_key": pem_to_base64url(settings.VAPID_PUBLIC_KEY)
     }
+    print(pem_to_base64url(settings.VAPID_PUBLIC_KEY))
     return render(request, 'home.html', context)
 
 def register(request):
@@ -313,9 +423,58 @@ def push_subscription(request):
     """Handle push notification subscription"""
     try:
         data = json.loads(request.body)
-        # Store subscription data (you might want to create a model for this)
-        # For now, we'll just return success
-        return JsonResponse({'status': 'success', 'message': 'Subscription saved'})
+        
+        # Check if user is authenticated
+        if not request.user.is_authenticated:
+            return JsonResponse({'status': 'error', 'message': 'User not authenticated'}, status=401)
+        
+        # Extract subscription data
+        endpoint = data.get('endpoint')
+        keys = data.get('keys', {})
+        p256dh_key = keys.get('p256dh')
+        auth_key = keys.get('auth')
+        
+        if not all([endpoint, p256dh_key, auth_key]):
+            return JsonResponse({'status': 'error', 'message': 'Missing required subscription data'}, status=400)
+        
+        # Create or update subscription
+        subscription, created = PushSubscription.objects.update_or_create(
+            user=request.user,
+            endpoint=endpoint,
+            defaults={
+                'p256dh_key': p256dh_key,
+                'auth_key': auth_key,
+                'is_active': True
+            }
+        )
+        
+        # Create notification preference if it doesn't exist
+        NotificationPreference.objects.get_or_create(
+            user=request.user,
+            defaults={
+                'birthday_notifications': True,
+                'reminder_days': 1,
+                'notification_time': '09:00',
+                'email_notifications': True,
+                'push_notifications': True
+            }
+        )
+        
+        # Log the subscription
+        NotificationLog.objects.create(
+            user=request.user,
+            notification_type='welcome',
+            title='Push Notifications Enabled',
+            message='You will now receive birthday notifications',
+            status='sent'
+        )
+        
+        action = 'created' if created else 'updated'
+        return JsonResponse({
+            'status': 'success', 
+            'message': f'Subscription {action} successfully'
+        })
+        
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
     except Exception as e:
@@ -328,9 +487,47 @@ def send_birthday_notification(request):
     """Send birthday notification via push"""
     try:
         data = json.loads(request.body)
-        # Here you would implement the actual push notification logic
-        # For now, we'll just return success
-        return JsonResponse({'status': 'success', 'message': 'Notification sent'})
+        
+        # Check if user is authenticated
+        if not request.user.is_authenticated:
+            return JsonResponse({'status': 'error', 'message': 'User not authenticated'}, status=401)
+        
+        # Extract notification data
+        birthday_person = data.get('person_name')
+        birthday_date = data.get('birthday_date')
+        notification_type = data.get('type', 'birthday')
+        
+        if not birthday_person:
+            return JsonResponse({'status': 'error', 'message': 'Missing birthday person name'}, status=400)
+        
+        # Get user's notification preferences
+        try:
+            preferences = NotificationPreference.objects.get(user=request.user)
+            if not preferences.birthday_notifications:
+                return JsonResponse({'status': 'error', 'message': 'Birthday notifications disabled'}, status=400)
+        except NotificationPreference.DoesNotExist:
+            # Create default preferences if they don't exist
+            preferences = NotificationPreference.objects.create(user=request.user)
+        
+        # Log the notification attempt
+        notification_log = NotificationLog.objects.create(
+            user=request.user,
+            notification_type=notification_type,
+            title=f"Birthday: {birthday_person}",
+            message=f"It's {birthday_person}'s birthday today! 🎉",
+            status='pending'
+        )
+        
+        # Here you would implement the actual push notification sending
+        # For now, we'll simulate success
+        notification_log.status = 'sent'
+        notification_log.save()
+        
+        return JsonResponse({
+            'status': 'success', 
+            'message': f'Birthday notification for {birthday_person} logged successfully'
+        })
+        
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
     except Exception as e:
@@ -352,3 +549,153 @@ def manifest(request):
     """Serve manifest with correct content type"""
     response = HttpResponse(open('static/manifest.json', 'r').read(), content_type='application/manifest+json')
     return response
+
+
+@login_required
+def notification_preferences(request):
+    """Manage notification preferences"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            # Get or create preferences
+            preferences, created = NotificationPreference.objects.get_or_create(
+                user=request.user,
+                defaults={
+                    'birthday_notifications': True,
+                    'reminder_days': 1,
+                    'notification_time': '09:00',
+                    'email_notifications': True,
+                    'push_notifications': True
+                }
+            )
+            
+            # Update preferences
+            preferences.birthday_notifications = data.get('birthday_notifications', True)
+            preferences.reminder_days = data.get('reminder_days', 1)
+            preferences.notification_time = data.get('notification_time', '09:00')
+            preferences.email_notifications = data.get('email_notifications', True)
+            preferences.push_notifications = data.get('push_notifications', True)
+            preferences.save()
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Notification preferences updated successfully'
+            })
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+    # GET request - return current preferences
+    try:
+        preferences = NotificationPreference.objects.get(user=request.user)
+        data = {
+            'birthday_notifications': preferences.birthday_notifications,
+            'reminder_days': preferences.reminder_days,
+            'notification_time': preferences.notification_time.strftime('%H:%M'),
+            'email_notifications': preferences.email_notifications,
+            'push_notifications': preferences.push_notifications
+        }
+    except NotificationPreference.DoesNotExist:
+        data = {
+            'birthday_notifications': True,
+            'reminder_days': 1,
+            'notification_time': '09:00',
+            'email_notifications': True,
+            'push_notifications': True
+        }
+    
+    return JsonResponse({'status': 'success', 'data': data})
+
+
+@login_required
+def notification_logs(request):
+    """Get user's notification logs"""
+    logs = NotificationLog.objects.filter(user=request.user).order_by('-sent_at')[:50]
+    
+    log_data = []
+    for log in logs:
+        log_data.append({
+            'id': log.id,
+            'type': log.notification_type,
+            'title': log.title,
+            'message': log.message,
+            'status': log.status,
+            'sent_at': log.sent_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'delivered_at': log.delivered_at.strftime('%Y-%m-%d %H:%M:%S') if log.delivered_at else None,
+            'error_message': log.error_message
+        })
+    
+    return JsonResponse({'status': 'success', 'logs': log_data})
+
+
+@login_required
+def trigger_birthday_notifications(request):
+    """Manually trigger birthday notifications for testing"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            test_mode = data.get('test', False)
+            
+            if test_mode:
+                # Send test notification to current user
+                success, message = send_push_notification_to_user(
+                    request.user,
+                    "🧪 Test Birthday Notification",
+                    "This is a test birthday notification from NeverForget!",
+                    'birthday'
+                )
+                
+                return JsonResponse({
+                    'status': 'success' if success else 'error',
+                    'message': message
+                })
+            
+            # Check for actual birthdays today
+            today = date.today()
+            todays_birthdays = []
+            
+            # Get birthdays for the current user's community
+            all_birthdays = BirthdayInfo.objects.filter(community_user_name=request.user)
+            
+            for birthday in all_birthdays:
+                if birthday.birthDate:
+                    if birthday.birthDate.month == today.month and birthday.birthDate.day == today.day:
+                        todays_birthdays.append(birthday)
+            
+            if not todays_birthdays:
+                return JsonResponse({
+                    'status': 'info',
+                    'message': 'No birthdays found today in your community.'
+                })
+            
+            # Send notifications for each birthday
+            notifications_sent = 0
+            for birthday in todays_birthdays:
+                title = f"🎉 Birthday Today: {birthday.personName}"
+                message = f"It's {birthday.personName}'s birthday today! Don't forget to celebrate! 🎂"
+                
+                success, msg = send_push_notification_to_user(
+                    request.user,
+                    title,
+                    message,
+                    'birthday'
+                )
+                
+                if success:
+                    notifications_sent += 1
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': f'Successfully sent {notifications_sent} birthday notification(s)',
+                'birthdays_found': len(todays_birthdays)
+            })
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+    return JsonResponse({'status': 'error', 'message': 'Only POST requests allowed'}, status=405)

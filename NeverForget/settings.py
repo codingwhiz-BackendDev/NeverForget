@@ -161,6 +161,23 @@ PWA_APP_ICONS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Push Notification Settings (VAPID Keys)
+# Generate these keys using: python -c "from pywebpush import WebPushException, webpush; from py_vapid import Vapid; vapid = Vapid(); print('Private Key:', vapid.private_key); print('Public Key:', vapid.public_key)"
+VAPID_PRIVATE_KEY = '''-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgPsfzExUbn5y53a00
+MJynaGAYNYmvbnOXX2VFZX73jPehRANCAAQtmsaYR/08urkLz5aCKbXGA1D+avIM
+MMaVxynekLZtgpD8FP223+Sq53Tt+oAoJv/1kMgvTzG0KQBQyII3bxax
+-----END PRIVATE KEY-----'''
+
+VAPID_PUBLIC_KEY = '''-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAELZrGmEf9PLq5C8+Wgim1xgNQ/mry
+DDDGlccp3pC2bYKQ/BT9tt/kqud07fqAKCb/9ZDIL08xtCkAUMiCN28WsQ==
+-----END PUBLIC KEY-----'''
+VAPID_CLAIMS = {
+    'sub': 'mailto:admin@neverforget.com',
+    'aud': 'https://fcm.googleapis.com'
+}
+
 # Templates
 TEMPLATES = [
     {
