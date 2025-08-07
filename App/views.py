@@ -6,6 +6,7 @@ from .models import BirthdayInfo, AdminProfile
 from django.core.files.storage import FileSystemStorage
 from datetime import date, timedelta
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 def calculate_age(born, ref_date):
@@ -141,22 +142,26 @@ def addBirthday(request):
         
         personImage = request.FILES.get('personImage')
         
-        BirthdayInfo.objects.create(
-            community_user_name=community_user_name,
-            personName=personName,
-            birthDate=birthDate, 
-            phoneNumber=phoneNumber, 
-            email=email, 
-            matric=matric, 
-            department=department,
-            level=level, 
-            personImage=personImage,
-            gender=gender,
-            trainingLevel=trainingLevel,
-            reminderDays=reminderDays
-            )
+        if BirthdayInfo.objects.filter(community_user_name=community_user_name, phoneNumber=phoneNumber).exists():
+            messages.error(request, 'User already exists!!!') 
+        else:
         
-        messages.success(request, f"{personName} successfully added")
+            BirthdayInfo.objects.create(
+                community_user_name=community_user_name,
+                personName=personName,
+                birthDate=birthDate, 
+                phoneNumber=phoneNumber, 
+                email=email, 
+                matric=matric, 
+                department=department,
+                level=level, 
+                personImage=personImage,
+                gender=gender,
+                trainingLevel=trainingLevel,
+                reminderDays=reminderDays
+                )
+        
+            
         
         return HttpResponse(f'{personName} successfully added')
 
@@ -166,30 +171,42 @@ def search_community(request):
 @login_required(login_url='login')
 def community_member(request, pk):
     member = get_object_or_404(BirthdayInfo, pk=pk)
+
     if request.method == 'POST':
+        # Store current phone number
+        current_phone = member.phoneNumber
+        new_phone = request.POST.get('phoneNumber', '').strip()
+
+        # Check if the new phone is already used by someone else
+        if new_phone and new_phone != current_phone:
+            if BirthdayInfo.objects.filter(phoneNumber=new_phone).exclude(pk=member.pk).exists():
+                messages.warning(request, "This phone number is already used by another member.")
+                return render(request, 'community_member.html', {'member': member})
+
         member.personName = request.POST.get('personName', member.personName)
-        
-        # Handle date field safely
+
         birth_date = request.POST.get('birthDate')
         if birth_date:
             member.birthDate = birth_date
-        # else: do not update if empty
-        
+
         member.email = request.POST.get('email', member.email)
-        phone = request.POST.get('phoneNumber')
-        member.phoneNumber = phone if phone else member.phoneNumber
+        member.phoneNumber = new_phone if new_phone else current_phone
         member.matric = request.POST.get('matric', member.matric)
         member.department = request.POST.get('department', member.department)
+
         level = request.POST.get('level')
         member.level = level if level else member.level
+
         member.gender = request.POST.get('gender', member.gender)
         member.trainingLevel = request.POST.get('trainingLevel', member.trainingLevel)
-        # Handle image upload if a new image is provided
+
         if request.FILES.get('personImage'):
             member.personImage = request.FILES['personImage']
+
         member.save()
         messages.success(request, "Profile updated successfully!")
         return redirect('community_member', pk=member.pk)
+
     return render(request, 'community_member.html', {'member': member})
  
 @login_required(login_url='login')
@@ -237,11 +254,10 @@ def editAdminProfile(request):
     
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
-
 def formLink(request, pk):
-    user = User.objects.get(username=pk)
+    user = get_object_or_404(User, username=pk)
     community_user_name = user
-    
+
     if request.method == 'POST':
         personName = request.POST.get('personName')
         birthDate = request.POST.get('birthDate')
@@ -253,9 +269,12 @@ def formLink(request, pk):
         gender = request.POST.get('gender')
         trainingLevel = request.POST.get('trainingLevel')
         reminderDays = request.POST.get('reminderDays')
-        
         personImage = request.FILES.get('personImage')
-        
+
+        if BirthdayInfo.objects.filter(community_user_name=community_user_name, phoneNumber=phoneNumber).exists():
+            messages.error(request, 'User with this phone number already exists!')
+            return redirect('profile', pk=community_user_name.username)
+
         try:
             BirthdayInfo.objects.create(
                 community_user_name=community_user_name,
@@ -271,21 +290,14 @@ def formLink(request, pk):
                 trainingLevel=trainingLevel,
                 reminderDays=reminderDays
             )
-            
-            # For AJAX requests, return JSON
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                messages.success(request, f"{personName} successfully added")
-                return JsonResponse({'success': True, 'message': f'{personName} successfully added'})
-            
-            # For regular form submissions
-            messages.success(request, f"{personName} successfully added")
-            
+            messages.success(request, f"{personName} was successfully added!")
+            return redirect('profile', pk=community_user_name.username)
+
         except Exception as e:
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({'success': False, 'error': str(e)})
-    
-    # This handles GET requests (when the page is first loaded)
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect('form_link', pk=community_user_name.username)
+
     context = {
         'community_user_name': community_user_name
     }
-    return render(request, 'formLink.html', context)  # REMOVED THE COMMA!
+    return render(request, 'formLink.html', context)
