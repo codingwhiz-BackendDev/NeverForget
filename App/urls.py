@@ -11,5 +11,12 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('community_member/<int:pk>/', views.community_member, name='community_member'),
     path('editAdminProfile', views.editAdminProfile, name = 'editAdminProfile'),
-    path('profile/<str:pk>/', views.formLink , name = 'profile')
+    path('profile/<str:pk>/', views.formLink , name = 'profile'),
+    
+    # PWA URLs
+    path('api/push-subscription/', views.push_subscription, name='push_subscription'),
+    path('api/send-birthday-notification/', views.send_birthday_notification, name='send_birthday_notification'),
+    path('offline/', views.offline_page, name='offline_page'),
+    path('sw.js', views.service_worker, name='service_worker'),
+    path('manifest.json', views.manifest, name='manifest'),
 ]

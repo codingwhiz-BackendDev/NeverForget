@@ -1,0 +1,338 @@
+/* PWA-specific styles */
+
+/* Install prompt styles */
+.install-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  max-width: 350px;
+  width: 90%;
+  animation: slideUp 0.3s ease-out;
+}
+
+.install-prompt-content h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.install-prompt-content p {
+  margin: 0 0 15px 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.install-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.install-buttons .btn {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.install-buttons .btn-primary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.install-buttons .btn-primary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.install-buttons .btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.install-buttons .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Offline indicator */
+.offline-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #ff6b6b;
+  color: white;
+  text-align: center;
+  padding: 8px;
+  font-size: 14px;
+  z-index: 9999;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.offline-indicator.show {
+  transform: translateY(0);
+}
+
+.offline-indicator i {
+  margin-right: 8px;
+}
+
+/* Online indicator */
+.online-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #51cf66;
+  color: white;
+  text-align: center;
+  padding: 8px;
+  font-size: 14px;
+  z-index: 9999;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.online-indicator.show {
+  transform: translateY(0);
+}
+
+.online-indicator i {
+  margin-right: 8px;
+}
+
+/* Loading indicator for PWA operations */
+.pwa-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 10001;
+  display: none;
+}
+
+.pwa-loading.show {
+  display: block;
+}
+
+.pwa-loading .spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 10px;
+}
+
+/* PWA status bar */
+.pwa-status-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: #6366f1;
+  z-index: 9998;
+  display: none;
+}
+
+/* Show status bar when in standalone mode */
+@media (display-mode: standalone) {
+  .pwa-status-bar {
+    display: block;
+  }
+  
+  body {
+    padding-top: 20px;
+  }
+}
+
+/* PWA app-like styles */
+@media (display-mode: standalone) {
+  body {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Hide browser UI elements */
+  header {
+    padding-top: 10px;
+  }
+  
+  /* Add app-like transitions */
+  .btn, .nav-links a {
+    transition: all 0.2s ease;
+  }
+  
+  .btn:active, .nav-links a:active {
+    transform: scale(0.95);
+  }
+}
+
+/* PWA splash screen styles */
+.pwa-splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10002;
+  transition: opacity 0.5s ease;
+}
+
+.pwa-splash.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pwa-splash .logo {
+  font-size: 48px;
+  color: white;
+  margin-bottom: 20px;
+  animation: pulse 2s infinite;
+}
+
+.pwa-splash .app-name {
+  font-size: 24px;
+  color: white;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.pwa-splash .tagline {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* PWA notification styles */
+.pwa-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  max-width: 300px;
+  z-index: 10003;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.pwa-notification.show {
+  transform: translateX(0);
+}
+
+.pwa-notification .notification-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.pwa-notification .notification-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: #6366f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+}
+
+.pwa-notification .notification-title {
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+
+.pwa-notification .notification-message {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+/* Responsive adjustments for PWA */
+@media (max-width: 768px) {
+  .install-prompt {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    transform: none;
+    max-width: none;
+    width: auto;
+  }
+  
+  .pwa-notification {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+/* PWA theme colors */
+:root {
+  --pwa-primary: #6366f1;
+  --pwa-secondary: #8b5cf6;
+  --pwa-success: #10b981;
+  --pwa-warning: #f59e0b;
+  --pwa-error: #ef4444;
+  --pwa-background: #ffffff;
+  --pwa-surface: #f8fafc;
+  --pwa-text: #1e293b;
+  --pwa-text-secondary: #64748b;
+} 

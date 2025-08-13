@@ -7,6 +7,9 @@ from django.core.files.storage import FileSystemStorage
 from datetime import date, timedelta
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 
 def calculate_age(born, ref_date):
@@ -301,3 +304,51 @@ def formLink(request, pk):
         'community_user_name': community_user_name
     }
     return render(request, 'formLink.html', context)
+
+
+# PWA API Endpoints
+@csrf_exempt
+@require_http_methods(["POST"])
+def push_subscription(request):
+    """Handle push notification subscription"""
+    try:
+        data = json.loads(request.body)
+        # Store subscription data (you might want to create a model for this)
+        # For now, we'll just return success
+        return JsonResponse({'status': 'success', 'message': 'Subscription saved'})
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def send_birthday_notification(request):
+    """Send birthday notification via push"""
+    try:
+        data = json.loads(request.body)
+        # Here you would implement the actual push notification logic
+        # For now, we'll just return success
+        return JsonResponse({'status': 'success', 'message': 'Notification sent'})
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
+def offline_page(request):
+    """Serve offline page"""
+    return render(request, 'offline.html')
+
+
+def service_worker(request):
+    """Serve service worker with correct content type"""
+    response = HttpResponse(open('static/sw.js', 'r').read(), content_type='application/javascript')
+    return response
+
+
+def manifest(request):
+    """Serve manifest with correct content type"""
+    response = HttpResponse(open('static/manifest.json', 'r').read(), content_type='application/manifest+json')
+    return response

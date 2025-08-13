@@ -5,15 +5,75 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NeverForget - Remember Every Birthday</title>
+
+    <!-- PWA Meta Tags -->
+    <meta
+      name="description"
+      content="Connect your community and make every birthday special. Share a simple link, collect birthdays, and ensure no one feels forgotten on their special day."
+    />
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="NeverForget" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-TileColor" content="#6366f1" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <!-- PWA Icons -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{% static 'icons/icon-32x32.png' %}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'icons/icon-16x16.png' %}"
+    />
+    <link rel="apple-touch-icon" href="{% static 'icons/icon-192x192.png' %}" />
+    <link rel="manifest" href="{% static 'manifest.json' %}" />
+
+    <!-- Stylesheets -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="stylesheet" href="{% static 'index.css' %}" />
     <link rel="stylesheet" href="{% static 'message.css' %}" />
+    <link rel="stylesheet" href="{% static 'pwa.css' %}" />
   </head>
 
   <body>
+    <!-- PWA Status Bar -->
+    <div class="pwa-status-bar"></div>
+
+    <!-- PWA Splash Screen -->
+    <div class="pwa-splash" id="pwa-splash">
+      <div class="logo">
+        <i class="fas fa-birthday-cake"></i>
+      </div>
+      <div class="app-name">NeverForget</div>
+      <div class="tagline">Remember Every Birthday</div>
+    </div>
+
+    <!-- PWA Loading Indicator -->
+    <div class="pwa-loading" id="pwa-loading">
+      <div class="spinner"></div>
+      <div>Loading...</div>
+    </div>
+
+    <!-- Offline/Online Indicators -->
+    <div class="offline-indicator" id="offline-indicator">
+      <i class="fas fa-wifi-slash"></i>
+      You're offline. Some features may be limited.
+    </div>
+    <div class="online-indicator" id="online-indicator">
+      <i class="fas fa-wifi"></i>
+      You're back online!
+    </div>
+
     <div class="scroll-progress" id="scroll-progress"></div>
     <div class="birthday-animation" id="particles"></div>
     {% if messages %}
@@ -201,5 +261,6 @@
 
     <script src="{% static 'index.js' %}"></script>
     <script src="{% static 'message.js' %}"></script>
+    <script src="{% static 'pwa.js' %}"></script>
   </body>
 </html>
