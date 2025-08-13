@@ -202,11 +202,23 @@
   justify-content: center;
   z-index: 10002;
   transition: opacity 0.5s ease;
+  opacity: 1;
 }
 
 .pwa-splash.hide {
   opacity: 0;
   pointer-events: none;
+}
+
+/* Ensure main content is visible */
+body {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Hide splash screen when opacity is 0 */
+.pwa-splash[style*="opacity: 0"] {
+  display: none !important;
 }
 
 .pwa-splash .logo {

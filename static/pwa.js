@@ -216,7 +216,35 @@ document.addEventListener('DOMContentLoaded', () => {
   window.pwaManager = new PWAManager();
   window.pwaManager.init();
   window.pwaManager.showAddToHomeScreenPrompt();
+  
+  // Hide splash screen immediately
+  hideSplashScreen();
 });
+
+// Also hide splash screen when page is fully loaded
+window.addEventListener('load', () => {
+  hideSplashScreen();
+});
+
+// Function to hide splash screen
+function hideSplashScreen() {
+  const splash = document.getElementById('pwa-splash');
+  const loading = document.getElementById('pwa-loading');
+  
+  if (splash) {
+    splash.style.opacity = '0';
+    setTimeout(() => {
+      splash.style.display = 'none';
+    }, 300);
+  }
+  
+  if (loading) {
+    loading.style.display = 'none';
+  }
+}
+
+// Hide splash screen after a short delay as fallback
+setTimeout(hideSplashScreen, 500);
 
 // Export for use in other scripts
 if (typeof module !== 'undefined' && module.exports) {
