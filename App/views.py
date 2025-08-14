@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth 
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse
 from .models import BirthdayInfo, AdminProfile, PushSubscription, NotificationPreference, NotificationLog
 from django.core.files.storage import FileSystemStorage
 from datetime import date, timedelta
@@ -13,11 +13,10 @@ from django.views.decorators.http import require_http_methods
 from django.utils import timezone 
 from django.conf import settings
 import re
-import base64
 from .utils.vapid_helper import get_vapid_public_key_base64url 
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
-
+import base64
 
 def calculate_age(born, ref_date):
     return ref_date.year - born.year - ((ref_date.month, ref_date.day) < (born.month, born.day))
@@ -25,11 +24,10 @@ def calculate_age(born, ref_date):
 
 def send_push_notification_to_user(user, title, message, notification_type='birthday'):
     """
-    Send push notification to a specific user using pywebpush
+    Send push notification to a specific user using pywebpush with proper VAPID key handling
     """
     try:
         from pywebpush import webpush, WebPushException
-        
         
         # Get user's active subscriptions
         subscriptions = PushSubscription.objects.filter(user=user, is_active=True)
@@ -37,7 +35,6 @@ def send_push_notification_to_user(user, title, message, notification_type='birt
         if not subscriptions.exists():
             return False, "No active subscriptions found"
         
-        # Get VAPID keys from settings
         vapid_private_key = getattr(settings, 'VAPID_PRIVATE_KEY', None)
         vapid_claims = getattr(settings, 'VAPID_CLAIMS', {
             'sub': 'mailto:admin@neverforget.com'
@@ -46,78 +43,105 @@ def send_push_notification_to_user(user, title, message, notification_type='birt
         if not vapid_private_key or vapid_private_key == 'YOUR_VAPID_PRIVATE_KEY_HERE':
             return False, "VAPID_PRIVATE_KEY not configured in settings"
         
-        # Log the notification attempt
-        notification_log = NotificationLog.objects.create(
-            user=user,
-            notification_type=notification_type,
-            title=title,
-            message=message,
-            status='pending'
-        )
-        
-        success_count = 0
-        for subscription in subscriptions:
+        try:
+            # Clean and process the private key
+            vapid_private_key_clean = vapid_private_key.strip()
+            
+            # Validate the private key format by loading it
             try:
-                # Prepare subscription info for pywebpush
-                subscription_info = {
-                    'endpoint': subscription.endpoint,
-                    'keys': {
-                        'p256dh': subscription.p256dh_key,
-                        'auth': subscription.auth_key
-                    }
-                }
-                
-                # Prepare notification data
-                notification_data = {
-                    'title': title,
-                    'message': message,
-                    'icon': '/static/icons/icon-192x192.png',
-                    'badge': '/static/icons/icon-192x192.png',
-                    'tag': 'birthday-notification',
-                    'data': {
-                        'url': '/home',
-                        'type': 'birthday'
-                    }
-                }
-                
-                # Send push notification
-                response = webpush(
-                    subscription_info=subscription_info,
-                    data=json.dumps(notification_data),
-                    vapid_private_key=vapid_private_key,
-                    vapid_claims=vapid_claims
+                private_key_obj = serialization.load_pem_private_key(
+                    vapid_private_key_clean.encode('utf-8'),
+                    password=None,
                 )
-                
-                if response.status_code == 200:
-                    success_count += 1
+                # Convert back to PEM format to ensure it's properly formatted
+                vapid_private_key_clean = private_key_obj.private_bytes(
+                    encoding=serialization.Encoding.PEM,
+                    format=serialization.PrivateFormat.PKCS8,
+                    encryption_algorithm=serialization.NoEncryption()
+                ).decode('utf-8')
+            except Exception as key_error:
+                return False, f"Invalid VAPID private key format: {str(key_error)}"
+            
+            # Log the notification attempt
+            notification_log = NotificationLog.objects.create(
+                user=user,
+                notification_type=notification_type,
+                title=title,
+                message=message,
+                status='pending'
+            )
+            
+            success_count = 0
+            for subscription in subscriptions:
+                try:
+                    # Prepare subscription info for pywebpush
+                    subscription_info = {
+                        'endpoint': subscription.endpoint,
+                        'keys': {
+                            'p256dh': subscription.p256dh_key,
+                            'auth': subscription.auth_key
+                        }
+                    }
                     
-            except WebPushException as e:
-                # Mark subscription as inactive if it's invalid
-                if '410' in str(e) or '404' in str(e):
-                    subscription.is_active = False
-                    subscription.save()
-            except Exception as e:
-                print(f"Error sending to subscription {subscription.id}: {str(e)}")
-        
-        # Update notification log
-        if success_count > 0:
-            notification_log.status = 'sent'
-            notification_log.delivered_at = timezone.now()
-            notification_log.save()
-            return True, f"Notification sent successfully to {success_count} device(s)"
-        else:
-            notification_log.status = 'failed'
-            notification_log.error_message = 'No successful deliveries'
-            notification_log.save()
-            return False, "No successful deliveries"
+                    # Prepare notification data
+                    notification_data = {
+                        'title': title,
+                        'message': message,
+                        'icon': '/static/icons/icon-192x192.png',
+                        'badge': '/static/icons/icon-192x192.png',
+                        'tag': 'birthday-notification',
+                        'data': {
+                            'url': '/home',
+                            'type': 'birthday'
+                        }
+                    }
+                    
+                    response = webpush(
+                        subscription_info=subscription_info,
+                        data=json.dumps(notification_data),
+                        vapid_private_key=vapid_private_key_clean,
+                        vapid_claims=vapid_claims
+                    )
+                    
+                    if response.status_code in [200, 201]:
+                        success_count += 1
+                        
+                except WebPushException as e:
+                    error_msg = str(e)
+                    print(f"WebPush error for subscription {subscription.id}: {error_msg}")
+                    
+                    # Mark subscription as inactive if it's invalid
+                    if any(code in error_msg for code in ['410', '404', '400']):
+                        subscription.is_active = False
+                        subscription.save()
+                        print(f"Marked subscription {subscription.id} as inactive due to error: {error_msg}")
+                        
+                except Exception as e:
+                    print(f"Error sending to subscription {subscription.id}: {str(e)}")
+            
+            # Update notification log
+            if success_count > 0:
+                notification_log.status = 'sent'
+                notification_log.delivered_at = timezone.now()
+                notification_log.save()
+                return True, f"Notification sent successfully to {success_count} device(s)"
+            else:
+                notification_log.status = 'failed'
+                notification_log.error_message = 'No successful deliveries'
+                notification_log.save()
+                return False, "No successful deliveries"
+                
+        except Exception as vapid_error:
+            return False, f"Failed to process VAPID private key: {str(vapid_error)}"
         
     except ImportError:
-        return False, "pywebpush library not installed. Run: pip install pywebpush"
+        return False, "Required libraries not installed. Run: pip install pywebpush py-vapid"
     except Exception as e:
         return False, str(e)
 
 def index(request):
     return render(request, 'index.html')
+
 def get_vapid_public_key_view(request):
     """API endpoint to serve the VAPID public key in the correct format"""
     try:
@@ -184,6 +208,36 @@ def home(request):
                 tomorrows_birthdays.append(b)
             else:
                 upcoming_birthdays.append(b)
+
+    if todays_birthdays:
+        # Check if we've already sent notifications today to avoid spam
+        today_logs = NotificationLog.objects.filter(
+            user=request.user,
+            notification_type='birthday',
+            sent_at__date=today,
+            status='sent'
+        )
+        
+        # Get names of people we've already notified today
+        already_notified = [log.title.replace('🎉 Birthday Today: ', '') for log in today_logs]
+        
+        # Send notifications for birthdays we haven't notified about today
+        for birthday in todays_birthdays:
+            if birthday.personName not in already_notified:
+                title = f"🎉 Birthday Today: {birthday.personName}"
+                message = f"It's {birthday.personName}'s birthday today! Don't forget to celebrate! 🎂"
+                
+                # Send push notification
+                success, msg = send_push_notification_to_user(
+                    request.user,
+                    title,
+                    message,
+                    'birthday'
+                )
+                
+                # Log the attempt (success or failure)
+                if not success:
+                    print(f"Failed to send birthday notification for {birthday.personName}: {msg}")
 
     # Sort: future birthdays first, then past birthdays (most recent first)
     upcoming_birthdays.sort(key=lambda x: (x.days_until if x.days_until > 0 else 9999 + x.days_since))
@@ -255,7 +309,6 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')
-
 
 @login_required(login_url='login')
 def addBirthday(request):
@@ -481,39 +534,6 @@ def push_subscription(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-        
-        # Create notification preference if it doesn't exist
-        NotificationPreference.objects.get_or_create(
-            user=request.user,
-            defaults={
-                'birthday_notifications': True,
-                'reminder_days': 1,
-                'notification_time': '09:00',
-                'email_notifications': True,
-                'push_notifications': True
-            }
-        )
-        
-        # Log the subscription
-        NotificationLog.objects.create(
-            user=request.user,
-            notification_type='welcome',
-            title='Push Notifications Enabled',
-            message='You will now receive birthday notifications',
-            status='sent'
-        )
-        
-        action = 'created' if created else 'updated'
-        return JsonResponse({
-            'status': 'success', 
-            'message': f'Subscription {action} successfully'
-        })
-        
-    except json.JSONDecodeError:
-        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
-    except Exception as e:
-        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -641,7 +661,7 @@ def notification_preferences(request):
             'push_notifications': True
         }
     
-    return JsonResponse({'status': 'success', 'data': data})
+    return JsonResponse({'status': 'success', 'data': data}) 
 
 
 @login_required
@@ -662,7 +682,7 @@ def notification_logs(request):
             'error_message': log.error_message
         })
     
-    return JsonResponse({'status': 'success', 'logs': log_data})
+    return JsonResponse({'status': 'success', 'logs': log_data}) 
 
 
 @login_required

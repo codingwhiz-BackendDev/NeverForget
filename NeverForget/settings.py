@@ -162,21 +162,26 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Push Notification Settings (VAPID Keys)
-# Generate these keys using: python -c "from pywebpush import WebPushException, webpush; from py_vapid import Vapid; vapid = Vapid(); print('Private Key:', vapid.private_key); print('Public Key:', vapid.public_key)"
 VAPID_PRIVATE_KEY = '''-----BEGIN PRIVATE KEY-----
-MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgPsfzExUbn5y53a00
-MJynaGAYNYmvbnOXX2VFZX73jPehRANCAAQtmsaYR/08urkLz5aCKbXGA1D+avIM
-MMaVxynekLZtgpD8FP223+Sq53Tt+oAoJv/1kMgvTzG0KQBQyII3bxax
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg5ME57kxSbTsLU9GT
+18Y+cQu8ZUnCOfjD57Qn+szh5EChRANCAASjWytFF83vnkSg3rZxYXDgg318M7XA
+BRgHOCix9USYH03VCHDlTVOmAQ+7zGlqcEqJP8tc50P9dsmKBZ6/7cln
 -----END PRIVATE KEY-----'''
 
 VAPID_PUBLIC_KEY = '''-----BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAELZrGmEf9PLq5C8+Wgim1xgNQ/mry
-DDDGlccp3pC2bYKQ/BT9tt/kqud07fqAKCb/9ZDIL08xtCkAUMiCN28WsQ==
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEo1srRRfN755EoN62cWFw4IN9fDO1
+wAUYBzgosfVEmB9N1Qhw5U1TpgEPu8xpanBKiT/LXOdD/XbJigWev+3JZw==
 -----END PUBLIC KEY-----'''
+
 VAPID_CLAIMS = {
     'sub': 'mailto:admin@neverforget.com',
     'aud': 'https://fcm.googleapis.com'
 }
+
+# Notification Settings
+NOTIFICATION_BATCH_SIZE = 100
+NOTIFICATION_RETRY_ATTEMPTS = 3
+NOTIFICATION_RETRY_DELAY = 300  # 5 minutes
 
 # Templates
 TEMPLATES = [
