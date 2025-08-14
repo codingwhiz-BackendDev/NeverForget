@@ -14,6 +14,11 @@ from django.utils import timezone
 from django.conf import settings
 import re
 import base64
+from .utils.vapid_helper import get_vapid_public_key_base64url 
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import ec
+
+
 def calculate_age(born, ref_date):
     return ref_date.year - born.year - ((ref_date.month, ref_date.day) < (born.month, born.day))
 
@@ -113,18 +118,34 @@ def send_push_notification_to_user(user, title, message, notification_type='birt
 
 def index(request):
     return render(request, 'index.html')
-
-def pem_to_base64url(pem_key):
-    """
-    Convert a PEM-encoded EC public key to base64url format without padding.
-    """
-    # Remove header/footer
-    key = re.sub(r"-----.*?-----", "", pem_key, flags=re.DOTALL)
-    key = key.strip().replace("\n", "")
-    # Decode PEM base64 → raw bytes
-    key_bytes = base64.b64decode(key)
-    # Encode raw bytes → base64url (no padding)
-    return base64.urlsafe_b64encode(key_bytes).decode('utf-8').rstrip("=")
+def get_vapid_public_key_view(request):
+    """API endpoint to serve the VAPID public key in the correct format"""
+    try:
+        # Load the PEM public key
+        public_key_pem = settings.VAPID_PUBLIC_KEY.encode('utf-8')
+        
+        # Parse the PEM key
+        public_key = serialization.load_pem_public_key(public_key_pem)
+        
+        # Get the raw public key bytes (uncompressed point format)
+        public_key_bytes = public_key.public_bytes(
+            encoding=serialization.Encoding.X962,
+            format=serialization.PublicFormat.UncompressedPoint
+        )
+        
+        # Convert to base64url format (what browsers expect)
+        public_key_base64url = base64.urlsafe_b64encode(public_key_bytes).decode('utf-8').rstrip('=')
+        
+        return JsonResponse({
+            'success': True,
+            'public_key': public_key_base64url
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)
 
 @login_required(login_url='login')
 def home(request):
@@ -177,9 +198,9 @@ def home(request):
         'all_birthdays':all_birthdays,
         'number_of_community_members':number_of_community_members,
         'adminProfile':adminProfile,
-        "vapid_public_key": pem_to_base64url(settings.VAPID_PUBLIC_KEY)
+       
     }
-    print(pem_to_base64url(settings.VAPID_PUBLIC_KEY))
+     
     return render(request, 'home.html', context)
 
 def register(request):
@@ -420,33 +441,46 @@ def formLink(request, pk):
 @csrf_exempt
 @require_http_methods(["POST"])
 def push_subscription(request):
-    """Handle push notification subscription"""
+    """
+    Handle push notification subscription from PWA
+    """
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
+    
     try:
         data = json.loads(request.body)
-        
-        # Check if user is authenticated
-        if not request.user.is_authenticated:
-            return JsonResponse({'status': 'error', 'message': 'User not authenticated'}, status=401)
         
         # Extract subscription data
         endpoint = data.get('endpoint')
         keys = data.get('keys', {})
-        p256dh_key = keys.get('p256dh')
-        auth_key = keys.get('auth')
+        p256dh = keys.get('p256dh')
+        auth = keys.get('auth')
         
-        if not all([endpoint, p256dh_key, auth_key]):
-            return JsonResponse({'status': 'error', 'message': 'Missing required subscription data'}, status=400)
+        if not all([endpoint, p256dh, auth]):
+            return JsonResponse({'error': 'Invalid subscription data'}, status=400)
         
         # Create or update subscription
         subscription, created = PushSubscription.objects.update_or_create(
             user=request.user,
             endpoint=endpoint,
             defaults={
-                'p256dh_key': p256dh_key,
-                'auth_key': auth_key,
+                'p256dh_key': p256dh,
+                'auth_key': auth,
                 'is_active': True
             }
         )
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Subscription saved successfully',
+            'created': created
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
         
         # Create notification preference if it doesn't exist
         NotificationPreference.objects.get_or_create(
