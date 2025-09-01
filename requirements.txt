@@ -8,3 +8,5 @@ cryptography>=3.4.8
 gunicorn
 psycopg2-binary 
 dj-database-url
+django-phonenumber-field
+phonenumbers
