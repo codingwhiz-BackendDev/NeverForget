@@ -10,3 +10,4 @@ psycopg2-binary
 dj-database-url
 django-phonenumber-field
 phonenumbers
+whitenoise
