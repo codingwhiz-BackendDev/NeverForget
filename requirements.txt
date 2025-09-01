@@ -5,3 +5,5 @@ webdriver-manager==4.0.0
 pywebpush==1.15.0
 py-vapid==1.9.0
 cryptography>=3.4.8
+gunicorn
+psycopg2-binary 
