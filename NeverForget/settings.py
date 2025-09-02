@@ -170,10 +170,7 @@ PWA_APP_ICONS = [
         'type': 'image/png'
     }
 ]
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+ 
 
 # Push Notification Settings (VAPID Keys)
 VAPID_PRIVATE_KEY = '''-----BEGIN PRIVATE KEY-----
