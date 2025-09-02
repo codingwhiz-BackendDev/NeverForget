@@ -42,11 +42,19 @@
               class="btn-icon profile-toggle"
               onclick="toggleProfileMenu()"
             >
+            {% if adminProfile.adminImage %}
               <img
                 src="{{adminProfile.adminImage.url}}"
                 alt="Profile"
                 class="profile-pic"
               />
+            {% else %}
+              <img
+                src="{% static 'sta.jpg' %}"
+                alt="Profile"
+                class="profile-pic"
+              />
+            {% endif %}
             </button>
           </div>
         </div>
@@ -61,11 +69,19 @@
             <div class="profile-cover">
               <div class="profile-avatar-container">
                 <div class="profile-avatar">
+                  {% if adminProfile.adminImage %}
                   <img
                     src="{{adminProfile.adminImage.url}}"
                     alt="Admin Profile"
                     id="profileImage"
                   />
+                  {% else %}
+                  <img
+                    src="{% static 'sta.jpg' %}"
+                    alt="Profile"
+                    id="profileImage"
+                  />
+                  {% endif %}
                    
                 </div>
                 <div class="admin-badge">
