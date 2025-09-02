@@ -22,25 +22,30 @@ ALLOWED_HOSTS = ['neverforget-yjhp.onrender.com']
 
 # Application definition
 INSTALLED_APPS = [
-    'App',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'phonenumber_field',
+    'cloudinary_storage',  # Must come before django.contrib.staticfiles
     'cloudinary',
-    'cloudinary_storage',
+    'phonenumber_field',
+    'App',  # Your app should come last
 ]
 
 # Cloudinary config
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUD_NAME'),
     'API_KEY': os.getenv('API_KEY'),
-    'API_SECRET': os.getenv('API_SECRET'),
+    'API_SECRET': os.getenv('API_SECRET'), 
 }
+
+# Set Cloudinary as the default storage for media files
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Media files configuration
+MEDIA_URL = '/media/'
  
 
 MIDDLEWARE = [
