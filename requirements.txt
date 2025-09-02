@@ -11,3 +11,5 @@ dj-database-url
 django-phonenumber-field
 phonenumbers
 whitenoise
+cloudinary 
+django-cloudinary-storage
