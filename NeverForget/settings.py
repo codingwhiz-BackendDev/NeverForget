@@ -15,7 +15,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=f=e#jlj23p!od!h@5rqnc*=hxw#g**z4=&fl+hmq!v!9^j6at'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Read DEBUG from environment; default to False in production
+DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = ['neverforget-yjhp.onrender.com']
 
@@ -40,6 +41,7 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.getenv('API_SECRET'),
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+ 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

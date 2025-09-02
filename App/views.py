@@ -2,8 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth 
 from django.http import HttpResponse, JsonResponse
-from .models import BirthdayInfo, AdminProfile, PushSubscription, NotificationPreference, NotificationLog
-from django.core.files.storage import FileSystemStorage
+from .models import BirthdayInfo, AdminProfile, PushSubscription, NotificationPreference, NotificationLog 
 from datetime import date, timedelta
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
