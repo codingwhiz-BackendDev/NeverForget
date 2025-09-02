@@ -35,9 +35,9 @@ INSTALLED_APPS = [
 
 # Cloudinary config
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUD_NAME'),
-    'API_KEY': os.getenv('API_KEY'),
-    'API_SECRET': os.getenv('API_SECRET'),
+    'CLOUD_NAME': 'dodutzaqm',
+    'API_KEY': '593872619215443',
+    'API_SECRET': 'o7RxNSiNpvycvG8Oaai3Nxfjcng',
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
