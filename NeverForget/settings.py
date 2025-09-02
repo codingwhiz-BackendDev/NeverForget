@@ -43,8 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'phonenumber_field',
     'cloudinary',
-    'cloudinary_storage',
-    'django.contrib.staticfiles',
+    'cloudinary_storage', 
 ]
 
 CLOUDINARY_STORAGE = {
