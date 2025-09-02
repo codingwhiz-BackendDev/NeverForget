@@ -22,7 +22,7 @@ SECRET_KEY = 'django-insecure-=f=e#jlj23p!od!h@5rqnc*=hxw#g**z4=&fl+hmq!v!9^j6at
 # Read DEBUG from environment; default to False in production
 DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['neverforget-yjhp.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'App',  # Your app should come last
 ]
 
-# Cloudinary configuration - Updated to use environment variables
+ 
+    # Fallback to individual environment variables
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUD_NAME', 'dodutzaqm'),
     'API_KEY': os.getenv('API_KEY', '593872619215443'),

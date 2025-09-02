@@ -175,8 +175,7 @@
           </div>
 
           <div class="birthday-timeline">
-            {% if todays_birthdays %} 
-            {% for b in todays_birthdays %}
+            {% if todays_birthdays %} {% for b in todays_birthdays %}
             <div class="birthday-item today">
               <div class="birthday-date">
                 <span class="badge">Today</span>
@@ -198,9 +197,8 @@
                 </div>
               </div>
             </div>
-            {% endfor %} {% endif %} 
-            {% if tomorrows_birthdays %} 
-            {% for b in tomorrows_birthdays %}
+            {% endfor %} {% endif %} {% if tomorrows_birthdays %} {% for b in
+            tomorrows_birthdays %}
             <div class="birthday-item tomorrow">
               <div class="birthday-date">
                 <span class="badge">Tomorrow</span>
@@ -222,10 +220,8 @@
                 </div>
               </div>
             </div>
-            {% endfor %} 
-            {% endif %} 
-            {% if upcoming_birthdays %} 
-            {% for b in upcoming_birthdays %}
+            {% endfor %} {% endif %} {% if upcoming_birthdays %} {% for b in
+            upcoming_birthdays %}
             <div class="birthday-item">
               <div class="birthday-date">
                 <span class="badge">Upcoming</span>
@@ -249,8 +245,7 @@
                 </div>
               </div>
             </div>
-            {% endfor %} 
-            {% endif %}
+            {% endfor %} {% endif %}
           </div>
         </div>
       </section>
@@ -451,6 +446,6 @@
     <script src="{% static 'home.js' %}"></script>
     <script src="{% static 'addbirthday.js' %}"></script>
     <script src="{% static 'message.js' %}"></script>
-<script src="{% static 'pwa.js' %}"></script>
+    <script src="{% static 'pwa.js' %}"></script>
   </body>
 </html>

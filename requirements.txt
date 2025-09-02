@@ -13,3 +13,4 @@ phonenumbers
 whitenoise
 cloudinary 
 django-cloudinary-storage
+python-dotenv
