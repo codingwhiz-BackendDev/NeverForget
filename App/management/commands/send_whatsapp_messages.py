@@ -462,7 +462,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING('🧪 Running in TEST mode - no messages will be sent'))
             for reminder in reminders:
                 number = self.format_phone_number(reminder.phoneNumber)
-                message = f"🎉 Happy Birthday {reminder.personName}! 🎂"
+                message = f"Remember to wish {reminder.personName}  Happy Birthday ! 🎉🎂"
                 self.stdout.write(self.style.SUCCESS(f"Would send to {number}: {message}"))
             return
         
