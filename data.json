@@ -1,0 +1,909 @@
+[
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "auth",
+        "model": "user"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "App",
+        "model": "birthdayinfo"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "App",
+        "model": "adminprofile"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "App",
+        "model": "pushsubscription"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "App",
+        "model": "notificationlog"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "App",
+        "model": "notificationpreference"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "0e7lyux582unu1s25knij39mbvd3it2e",
+    "fields": {
+        "session_data": ".eJxVjEsKwzAMBe_idQn-yIrdXQs9h5FlGYd-CHWzCrl7CWTRLucNb1aVaPm0tHR5p6mos7Lq9Ltl4ru8dnGZ5-GgPtyeND2uh_s7NOptz1Bm9tEgYQCQ6IhLjdmCqzmg8xa1kK9FRhi5FIc1GKwagQ1iMFptXwj9MYI:1udsPr:qUDDmkonDdmNxBoPjv4XvRX3MXOE0mYhLLyM3TYbQDk",
+        "expire_date": "2025-08-04T15:26:59.191Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "10u9ivzowodek5b2gi4h8scg3zmirpb5",
+    "fields": {
+        "session_data": ".eJxVjEsKwzAMBe_idQn-yIrdXQs9h5FlGYd-CHWzCrl7CWTRLucNb1aVaPm0tHR5p6mos7Lq9Ltl4ru8dnGZ5-GgPtyeND2uh_s7NOptz1Bm9tEgYQCQ6IhLjdmCqzmg8xa1kK9FRhi5FIc1GKwagQ1iMFptXwj9MYI:1ujJyE:68dcrOaE7rhjmitt9M2Jsum9Yvow848y4Darp1CxnZ8",
+        "expire_date": "2025-08-19T15:52:58.135Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "4fwgfvyw2kduzu8op2slcm2g5qwebjao",
+    "fields": {
+        "session_data": ".eJxVjMEOwiAQRP-FsyFdLMvq0Xu_gQC7SNW0SWlPxn-XJj3ocd68mbfyYVuL36osfmR1VaBOvyyG9JRpL_gRpvus0zytyxj1ruijrXqYWV63w_07KKGWtpY-m54Is7XCLEiXjhABYmrBAUlPDhu2kNnFs3TWCBhCx8kAZlafL9q9N5s:1uc22H:ObzOSGaml_eQk4m26R3PkHQ6d4QSKORRU-O0AMgWLZU",
+        "expire_date": "2025-07-30T13:19:01.890Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "aukbn5vb4671s1nw6d19pd6ahs95p31v",
+    "fields": {
+        "session_data": ".eJxVjEsKwzAMBe_idQn-yIrdXQs9h5FlGYd-CHWzCrl7CWTRLucNb1aVaPm0tHR5p6mos7Lq9Ltl4ru8dnGZ5-GgPtyeND2uh_s7NOptz1Bm9tEgYQCQ6IhLjdmCqzmg8xa1kK9FRhi5FIc1GKwagQ1iMFptXwj9MYI:1ujfhy:toLG9nQWzT9o1Cg5DjkU8iu9esA7aY8vjv2ripk9Lpg",
+        "expire_date": "2025-08-20T15:05:38.927Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "gksb5ojrlqlwgtc4q3dxab77y6q358tg",
+    "fields": {
+        "session_data": ".eJxVjEsKwzAMBe_idQn-yIrdXQs9h5FlGYd-CHWzCrl7CWTRLucNb1aVaPm0tHR5p6mos7Lq9Ltl4ru8dnGZ5-GgPtyeND2uh_s7NOptz1Bm9tEgYQCQ6IhLjdmCqzmg8xa1kK9FRhi5FIc1GKwagQ1iMFptXwj9MYI:1upW51:OQAqotVjMx5XJt7Qnpx-AixHu9B5aIHAjtjSbfVHXro",
+        "expire_date": "2025-09-05T18:01:35.966Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "iva0cwlpw47o76cdj1l9g7v5el6ycjfa",
+    "fields": {
+        "session_data": "e30:1uc2km:FMnWiG302jcTRdFAHo5ShiSabPM6aRJDC0OGyY3wJbk",
+        "expire_date": "2025-07-30T14:05:00.998Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "n11cp5urleh0ht4z3cb3et72llbg6c99",
+    "fields": {
+        "session_data": ".eJxVjEsKwzAMBe_idQn-yIrdXQs9h5FlGYd-CHWzCrl7CWTRLucNb1aVaPm0tHR5p6mos7Lq9Ltl4ru8dnGZ5-GgPtyeND2uh_s7NOptz1Bm9tEgYQCQ6IhLjdmCqzmg8xa1kK9FRhi5FIc1GKwagQ1iMFptXwj9MYI:1uk1cr:SVq5caGTVEXw_cSvGDB7_IsApwa5Nk3owPsC6RBhTIE",
+        "expire_date": "2025-08-21T14:29:49.045Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "niukkr1hnbblzxz8r44x0566u12aq58d",
+    "fields": {
+        "session_data": ".eJxVjMEOwiAQRP-FsyFdLMvq0Xu_gQC7SNW0SWlPxn-XJj3ocd68mbfyYVuL36osfmR1VaBOvyyG9JRpL_gRpvus0zytyxj1ruijrXqYWV63w_07KKGWtpY-m54Is7XCLEiXjhABYmrBAUlPDhu2kNnFs3TWCBhCx8kAZlafL9q9N5s:1upW5b:Htn6zOl2Y4rtcTDVHsCLKYCCMS4D58TwWv3GFWwWkxk",
+        "expire_date": "2025-09-05T18:02:11.170Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "plh8ac6yxcjpzgki02h9d7dl4utzrgyy",
+    "fields": {
+        "session_data": ".eJxVjMEOwiAQRP-FsyFdLMvq0Xu_gQC7SNW0SWlPxn-XJj3ocd68mbfyYVuL36osfmR1VaBOvyyG9JRpL_gRpvus0zytyxj1ruijrXqYWV63w_07KKGWtpY-m54Is7XCLEiXjhABYmrBAUlPDhu2kNnFs3TWCBhCx8kAZlafL9q9N5s:1ujH77:bgimPK1gKUcem0ncr0XZyVTaSMvyX7VgFcUXEBzgCB8",
+        "expire_date": "2025-08-19T12:49:57.146Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "qnriiem2nmfbd99ppwuezi3y07kxjbfq",
+    "fields": {
+        "session_data": ".eJxVjEsKwzAMBe_idQn-yIrdXQs9h5FlGYd-CHWzCrl7CWTRLucNb1aVaPm0tHR5p6mos7Lq9Ltl4ru8dnGZ5-GgPtyeND2uh_s7NOptz1Bm9tEgYQCQ6IhLjdmCqzmg8xa1kK9FRhi5FIc1GKwagQ1iMFptXwj9MYI:1umC5X:Sl9VLRSfKFZ2e6f42uRHmIosct2mZEIlbt9obuKf1uQ",
+        "expire_date": "2025-08-27T14:04:23.328Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "rldh3nyx25vnsmaye92nqlsnsuruta9s",
+    "fields": {
+        "session_data": ".eJxVjEsKwzAMBe_idQn-yIrdXQs9h5FlGYd-CHWzCrl7CWTRLucNb1aVaPm0tHR5p6mos7Lq9Ltl4ru8dnGZ5-GgPtyeND2uh_s7NOptz1Bm9tEgYQCQ6IhLjdmCqzmg8xa1kK9FRhi5FIc1GKwagQ1iMFptXwj9MYI:1upSPq:8CXlDP5Bvr1egy3w55mubVJFNIqGCITNNswKM3kZ-LU",
+        "expire_date": "2025-09-05T14:06:50.071Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "u1qpqua5iifcckmw8owh8my8zyl64bjj",
+    "fields": {
+        "session_data": ".eJxVjEsKwzAMBe_idQn-yIrdXQs9h5FlGYd-CHWzCrl7CWTRLucNb1aVaPm0tHR5p6mos7Lq9Ltl4ru8dnGZ5-GgPtyeND2uh_s7NOptz1Bm9tEgYQCQ6IhLjdmCqzmg8xa1kK9FRhi5FIc1GKwagQ1iMFptXwj9MYI:1uk5dI:p8XzBj9BGRZOY0SjPL1inIhdFgSIcJlGH8057jWGc4c",
+        "expire_date": "2025-08-21T18:46:32.356Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "u9swdnorpropzkmzavfocoodfr58scgt",
+    "fields": {
+        "session_data": ".eJxVjEsKwzAMBe_idQn-yIrdXQs9h5FlGYd-CHWzCrl7CWTRLucNb1aVaPm0tHR5p6mos7Lq9Ltl4ru8dnGZ5-GgPtyeND2uh_s7NOptz1Bm9tEgYQCQ6IhLjdmCqzmg8xa1kK9FRhi5FIc1GKwagQ1iMFptXwj9MYI:1upSOt:k8o4IYVm1J-gibZ8TwwlQJ4OuCXCCFprJZbFt20qiGM",
+        "expire_date": "2025-09-05T14:05:51.240Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "uy3h3jhsr8bbhm3ou02ww16k8tu1zckg",
+    "fields": {
+        "session_data": ".eJxVjMEOwiAQRP-FsyFdLMvq0Xu_gQC7SNW0SWlPxn-XJj3ocd68mbfyYVuL36osfmR1VaBOvyyG9JRpL_gRpvus0zytyxj1ruijrXqYWV63w_07KKGWtpY-m54Is7XCLEiXjhABYmrBAUlPDhu2kNnFs3TWCBhCx8kAZlafL9q9N5s:1umCAZ:QBduYBst_StvhWskEw0WL2skhSulZaXlou-q2y7QQBM",
+        "expire_date": "2025-08-27T14:09:35.264Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "yj3gzieu6uriuxld96gsqp2cxrq7p5h6",
+    "fields": {
+        "session_data": ".eJxVjMEOwiAQRP-FsyFdLMvq0Xu_gQC7SNW0SWlPxn-XJj3ocd68mbfyYVuL36osfmR1VaBOvyyG9JRpL_gRpvus0zytyxj1ruijrXqYWV63w_07KKGWtpY-m54Is7XCLEiXjhABYmrBAUlPDhu2kNnFs3TWCBhCx8kAZlafL9q9N5s:1uk3vQ:BbEVIcuRYTizNEOhm_LC6Aj_zyyDn1nvnoEEDh6rXpM",
+        "expire_date": "2025-08-21T16:57:08.625Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "yzrug3ay8e9recmjqgknj430r3payqn9",
+    "fields": {
+        "session_data": ".eJxVjEsKwzAMBe_idQn-yIrdXQs9h5FlGYd-CHWzCrl7CWTRLucNb1aVaPm0tHR5p6mos7Lq9Ltl4ru8dnGZ5-GgPtyeND2uh_s7NOptz1Bm9tEgYQCQ6IhLjdmCqzmg8xa1kK9FRhi5FIc1GKwagQ1iMFptXwj9MYI:1uc6uz:vnBF02wXQx-XN38uliCFagf3wmVCRAXZsjfyCV9mAJc",
+        "expire_date": "2025-07-30T18:31:49.598Z"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "view_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "view_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "view_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add user",
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "codename": "add_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change user",
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "codename": "change_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete user",
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "codename": "delete_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view user",
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "codename": "view_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "view_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "view_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add birthday info",
+        "content_type": [
+            "App",
+            "birthdayinfo"
+        ],
+        "codename": "add_birthdayinfo"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change birthday info",
+        "content_type": [
+            "App",
+            "birthdayinfo"
+        ],
+        "codename": "change_birthdayinfo"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete birthday info",
+        "content_type": [
+            "App",
+            "birthdayinfo"
+        ],
+        "codename": "delete_birthdayinfo"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view birthday info",
+        "content_type": [
+            "App",
+            "birthdayinfo"
+        ],
+        "codename": "view_birthdayinfo"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add admin profile",
+        "content_type": [
+            "App",
+            "adminprofile"
+        ],
+        "codename": "add_adminprofile"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change admin profile",
+        "content_type": [
+            "App",
+            "adminprofile"
+        ],
+        "codename": "change_adminprofile"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete admin profile",
+        "content_type": [
+            "App",
+            "adminprofile"
+        ],
+        "codename": "delete_adminprofile"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view admin profile",
+        "content_type": [
+            "App",
+            "adminprofile"
+        ],
+        "codename": "view_adminprofile"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add Push Subscription",
+        "content_type": [
+            "App",
+            "pushsubscription"
+        ],
+        "codename": "add_pushsubscription"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change Push Subscription",
+        "content_type": [
+            "App",
+            "pushsubscription"
+        ],
+        "codename": "change_pushsubscription"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete Push Subscription",
+        "content_type": [
+            "App",
+            "pushsubscription"
+        ],
+        "codename": "delete_pushsubscription"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view Push Subscription",
+        "content_type": [
+            "App",
+            "pushsubscription"
+        ],
+        "codename": "view_pushsubscription"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add Notification Log",
+        "content_type": [
+            "App",
+            "notificationlog"
+        ],
+        "codename": "add_notificationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change Notification Log",
+        "content_type": [
+            "App",
+            "notificationlog"
+        ],
+        "codename": "change_notificationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete Notification Log",
+        "content_type": [
+            "App",
+            "notificationlog"
+        ],
+        "codename": "delete_notificationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view Notification Log",
+        "content_type": [
+            "App",
+            "notificationlog"
+        ],
+        "codename": "view_notificationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add Notification Preference",
+        "content_type": [
+            "App",
+            "notificationpreference"
+        ],
+        "codename": "add_notificationpreference"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change Notification Preference",
+        "content_type": [
+            "App",
+            "notificationpreference"
+        ],
+        "codename": "change_notificationpreference"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete Notification Preference",
+        "content_type": [
+            "App",
+            "notificationpreference"
+        ],
+        "codename": "delete_notificationpreference"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view Notification Preference",
+        "content_type": [
+            "App",
+            "notificationpreference"
+        ],
+        "codename": "view_notificationpreference"
+    }
+},
+{
+    "model": "auth.user",
+    "fields": {
+        "password": "pbkdf2_sha256$720000$KBN7lTkrUsUSJBX0U178cL$KBTIKzkmLdC/klTdb01cxwOJTYf9DCEW8smo4ZRJUnM=",
+        "last_login": "2025-08-22T18:02:11.170Z",
+        "is_superuser": true,
+        "username": "Admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-07-16T13:08:32.767Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "fields": {
+        "password": "pbkdf2_sha256$720000$dw06vOWILQmt9RRYtQWBxW$kb9zTLRLjuEisJf1ush7tguc4YBFYYhB1SFCPsILfPE=",
+        "last_login": "2025-08-22T18:01:35.943Z",
+        "is_superuser": false,
+        "username": "BibleStudyFamily",
+        "first_name": "",
+        "last_name": "",
+        "email": "oluyemiemma2409@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-16T13:35:33.516Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "fields": {
+        "password": "pbkdf2_sha256$720000$mHiD7SIJLAo1MVm3o9NyUU$h365O6XII+8280hiVDB00aOYr+TzxKj6e+TCDpV+U74=",
+        "last_login": "2025-08-13T13:56:54.805Z",
+        "is_superuser": false,
+        "username": "PrayerDepartment",
+        "first_name": "",
+        "last_name": "",
+        "email": "oluyemigift419@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-08-13T13:56:43.979Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "App.birthdayinfo",
+    "pk": 15,
+    "fields": {
+        "community_user_name": [
+            "BibleStudyFamily"
+        ],
+        "personName": "John",
+        "personImage": "Birthday Images/hero_7tCdyiH.jpg",
+        "birthDate": "2005-09-24",
+        "phoneNumber": "8022334455",
+        "email": "john@gmail.com",
+        "matric": "RUn",
+        "department": "Computer Science",
+        "level": 400,
+        "gender": "male",
+        "trainingLevel": "completed",
+        "reminderDays": 1
+    }
+},
+{
+    "model": "App.birthdayinfo",
+    "pk": 16,
+    "fields": {
+        "community_user_name": [
+            "BibleStudyFamily"
+        ],
+        "personName": "Paul",
+        "personImage": "Birthday Images/IMG-20221224-WA0011.jpg",
+        "birthDate": "2005-04-09",
+        "phoneNumber": "8011223344",
+        "email": "Pual@gmail.com",
+        "matric": "RUN",
+        "department": "Computer Science",
+        "level": 300,
+        "gender": "male",
+        "trainingLevel": "baptisimal",
+        "reminderDays": 1
+    }
+},
+{
+    "model": "App.birthdayinfo",
+    "pk": 21,
+    "fields": {
+        "community_user_name": [
+            "BibleStudyFamily"
+        ],
+        "personName": "Grace",
+        "personImage": "Birthday Images/puy.jpg",
+        "birthDate": "2025-08-17",
+        "phoneNumber": "8036719149",
+        "email": "grace@gmail.com",
+        "matric": "RUN",
+        "department": "Computer Science",
+        "level": 8,
+        "gender": "male",
+        "trainingLevel": "baptisimal",
+        "reminderDays": 1
+    }
+},
+{
+    "model": "App.birthdayinfo",
+    "pk": 23,
+    "fields": {
+        "community_user_name": [
+            "BibleStudyFamily"
+        ],
+        "personName": "Little Katrina",
+        "personImage": "Birthday Images/Photo0239_iaYpiOF.jpg",
+        "birthDate": "2025-08-22",
+        "phoneNumber": "8038082848",
+        "email": "kkk@gmail.com",
+        "matric": "RUN",
+        "department": "Computer Science",
+        "level": 8,
+        "gender": "male",
+        "trainingLevel": "baptisimal",
+        "reminderDays": 1
+    }
+},
+{
+    "model": "App.birthdayinfo",
+    "pk": 24,
+    "fields": {
+        "community_user_name": [
+            "BibleStudyFamily"
+        ],
+        "personName": "Testing",
+        "personImage": "Birthday Images/Best_cech.jpg",
+        "birthDate": "2005-08-14",
+        "phoneNumber": "8072846035",
+        "email": "kkk@gmail.com",
+        "matric": "RUN",
+        "department": "vhchg",
+        "level": 500,
+        "gender": "male",
+        "trainingLevel": "baptisimal",
+        "reminderDays": 1
+    }
+},
+{
+    "model": "App.adminprofile",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "BibleStudyFamily"
+        ],
+        "community_name": "Bible Study Family",
+        "adminImage": "Admin Images/citroen-survolt-concept-car-design_9v0qN0m.jpg",
+        "email": "oluyemiemma2409@gmail.com",
+        "phone_number": "+2348072846035",
+        "birthday": "2025-07-31"
+    }
+},
+{
+    "model": "App.adminprofile",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "PrayerDepartment"
+        ],
+        "community_name": null,
+        "adminImage": "",
+        "email": "",
+        "phone_number": "",
+        "birthday": null
+    }
+},
+{
+    "model": "App.pushsubscription",
+    "pk": 4,
+    "fields": {
+        "user": [
+            "BibleStudyFamily"
+        ],
+        "endpoint": "https://fcm.googleapis.com/fcm/send/dnD1IppWJUs:APA91bHFgqgqIvYpELjE72aNPgNdRlAxw5-23oM2WVt2K4NafSWlXslHB4ndywYKaPVk0rubfDVZIEuwThX3qNZr3_9BFN7z20jeyRB2cRaVyNayNFCKA-mNyTCNp71MWi76xMaHpMxX",
+        "p256dh_key": "BHENbyNqD69Sze5UEoj-XgsX6s4BVR4uDjMo2mw7GQZYEL5auY9A40YyCH1Xd-1MC-FFORbD-hgnzIIY4RXeYms",
+        "auth_key": "exoDrDNHPGchTxIbbtSIuw",
+        "created_at": "2025-08-14T13:54:19.858Z",
+        "updated_at": "2025-08-22T18:34:30.489Z",
+        "is_active": true
+    }
+},
+{
+    "model": "App.notificationpreference",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "BibleStudyFamily"
+        ],
+        "birthday_notifications": true,
+        "reminder_days": 1,
+        "notification_time": "09:00:00",
+        "email_notifications": true,
+        "push_notifications": true,
+        "created_at": "2025-08-13T13:40:35.972Z",
+        "updated_at": "2025-08-13T13:40:35.972Z"
+    }
+},
+{
+    "model": "App.notificationlog",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "BibleStudyFamily"
+        ],
+        "notification_type": "birthday",
+        "title": 

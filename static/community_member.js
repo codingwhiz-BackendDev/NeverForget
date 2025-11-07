@@ -151,6 +151,11 @@ function initializeProfileForm() {
     }
   })
 
+  
+  cancelBtn.addEventListener("click", () =>{
+    window.location.href = "/home"
+  })
+  
   // Save button click
   saveBtn.addEventListener("click", (e) => {
     e.preventDefault()

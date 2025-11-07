@@ -190,10 +190,10 @@
                   <h3 cl>{{ b.personName }}</h3>
                   <p>Turning {{ b.age_on_next_bday }} today! 🎉</p>
                   <div class="birthday-actions">
-                    <button class="btn-small btn-celebrate">
+                    <a href="https://wa.me/{{ b.phone_number }}?text=Happy%20Birthday!%20🎉" style="text-decoration: none;" class="btn-small btn-celebrate">
                       <i class="fas fa-heart"></i>
                       Wish Happy Birthday
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -210,16 +210,15 @@
               <div class="birthday-info">
                 <div class="person-avatar">
                   <img src="{{ b.personImage.url }}" alt="{{ b.personName }}" />
-                  <p>{{ b.personImage.url }}</p>
                 </div>
                 <div class="person-details">
                   <h3>{{ b.personName }}</h3>
                   <p>Turning {{ b.age_on_next_bday }} tomorrow</p>
                   <div class="birthday-actions">
-                    <button class="btn-small btn-remind">
-                      <i class="fas fa-bell"></i>
-                      View
-                    </button>
+                    <a href="https://wa.me/{{ b.phone_number }}?text=Happy%20Birthday!%20🎉" style="text-decoration: none;" class="btn-small btn-remind">
+                      <i class="fab fa-whatsapp"></i>
+                      Message
+                    </a>
                   </div>
                 </div>
               </div>
@@ -243,10 +242,10 @@
                     Turning {{ b.age_on_next_bday }} in {{ b.days_until }} days
                   </p>
                   <div class="birthday-actions">
-                    <button class="btn-small btn-remind">
-                      <i class="fas fa-bell"></i>
-                      Set Reminder
-                    </button>
+                    <a href="https://wa.me/{{ b.phone_number }}?text=Happy%20Birthday!%20🎉" style="text-decoration: none;" class="btn-small btn-remind">
+                      <i class="fab fa-whatsapp"></i>
+                      Message
+                    </a>
                   </div>
                 </div>
               </div>

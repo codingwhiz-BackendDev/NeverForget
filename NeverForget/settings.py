@@ -19,10 +19,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=f=e#jlj23p!od!h@5rqnc*=hxw#g**z4=&fl+hmq!v!9^j6at'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Read DEBUG from environment; default to False in production
-DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
+# Read DEBUG from environment; default to False in production 
+DEBUG = True
 
-ALLOWED_HOSTS = ['neverforget-yjhp.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -93,12 +93,12 @@ WSGI_APPLICATION = 'NeverForget.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
