@@ -23,7 +23,8 @@
       {% endif %}
         <div class="profile-card animated">
             <div class="profile-image">
-                <img src="{{ member.personImage.url }}" alt="{{ member.personName }}">
+                <img src="{{ member.personImage.url }}" alt="{{ member.personName }}"><br>
+                <a href="{{ member.personImage.url }}" download class="btn">Download Image</a>
             </div>
             <form id="profileForm" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}

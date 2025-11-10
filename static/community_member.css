@@ -302,6 +302,10 @@ select option {
     animation: spin 1s linear infinite;
     margin-left: 0.5rem;
 }
+a{
+    text-decoration: none;
+    color: white;
+}
 
 /* Success state */
 .btn.success {

@@ -481,7 +481,7 @@ def formLink(request, pk):
 
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
-            return redirect('form_link', pk=community_user_name.username)
+            return redirect('profile', pk=community_user_name.username)
 
     context = {
         'community_user_name': community_user_name
