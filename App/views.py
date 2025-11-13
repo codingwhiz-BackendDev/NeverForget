@@ -399,6 +399,7 @@ def community_member(request, pk):
 def profile(request):
     user_obj = User.objects.get(username=request.user)
     adminProfile = AdminProfile.objects.get(user=user_obj)
+    print(adminProfile.adminImage.url)
     
     all_birthdays = BirthdayInfo.objects.filter(community_user_name=user_obj)
     number_of_community_members = len(all_birthdays) 
@@ -414,15 +415,13 @@ def editAdminProfile(request):
     if request.method == 'POST':
         user = request.user
         community_name = request.POST.get('community_name') 
-        phone_number = request.POST.get('phoneNumber')
-        birthday = request.POST.get('birthday')
+        phone_number = request.POST.get('phoneNumber') 
         admin_image = request.FILES.get('profile_image')
 
         try:
             profile = AdminProfile.objects.get(user=user)
             profile.community_name = community_name
-            profile.phone_number = phone_number
-            profile.birthday = birthday
+            profile.phone_number = phone_number 
             if admin_image:
                 profile.adminImage = admin_image
             profile.save()
@@ -431,8 +430,7 @@ def editAdminProfile(request):
             AdminProfile.objects.create(
                 user=user,
                 community_name=community_name,
-                phone_number=phone_number,
-                birthday=birthday,
+                phone_number=phone_number, 
                 adminImage=admin_image,
                 email=user.email  # Required field
             )

@@ -425,7 +425,6 @@
                     type="file"
                     id="editImage"
                     name="profile_image"
-                    required
                 />
             </div>
 
@@ -435,8 +434,7 @@
                     type="text"
                     id="editFullName"
                     name="community_name"
-                    value="{{ admin_profile.full_name|default:"" }}"
-                    required
+                    value="{{ admin_profile.full_name|default:"" }}" 
                 />
             </div>
 
@@ -446,22 +444,11 @@
                     type="tel"
                     id="editPhone"
                     name="phoneNumber"
-                    value="{{ admin_profile.phone_number|default:"" }}"
-                    required
+                    value="{{ admin_profile.phone_number|default:"" }}" 
                 />
             </div>
 
-            <div class="form-group">
-                <label for="editBirthday">Birthday</label>
-                <input
-                    type="date"
-                    id="editBirthday"
-                    name="birthday"
-                    value="{{ admin_profile.birthday|date:"Y-m-d"|default:"" }}"
-                    required
-                />
-            </div>
-
+            
             <div class="form-actions">
                 <button
                     type="button"

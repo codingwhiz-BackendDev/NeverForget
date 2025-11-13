@@ -19,7 +19,7 @@ class BirthdayInfo(models.Model):
 
     community_user_name = models.ForeignKey(User, on_delete=models.CASCADE , null=True)
     personName = models.CharField(max_length=50)
-    personImage = models.ImageField(upload_to='birthday_images', null=True, blank=True)
+    personImage = models.ImageField(upload_to='birthday_images/', null=True, blank=True)
     birthDate = models.DateField(auto_now=False, auto_now_add=False) 
     phoneNumber = models.CharField(max_length=15)
     email = models.EmailField(max_length=254)
@@ -37,13 +37,12 @@ class BirthdayInfo(models.Model):
 class AdminProfile(models.Model): 
     user = models.ForeignKey(User, on_delete=models.CASCADE , null=True)
     community_name = models.CharField(max_length=50, null=True)
-    adminImage = models.ImageField(upload_to='admin_images', null=True, blank=True)
+    adminImage = models.ImageField(upload_to='admin_images/', null=True, blank=True)
     email = models.EmailField(max_length=254)
-    phone_number = PhoneNumberField(region='NG')
-    birthday = models.DateField(auto_now=False, auto_now_add=False, null=True) 
+    phone_number = PhoneNumberField(region='NG') 
     
     def __str__(self):
-        return str(self.community_name)
+        return str(self.user)
 
 
 class PushSubscription(models.Model):
