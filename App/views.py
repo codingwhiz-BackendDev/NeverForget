@@ -27,112 +27,90 @@ def send_push_notification_to_user(user, title, message, notification_type='birt
     """
     try:
         from pywebpush import webpush, WebPushException
-        
-        # Get user's active subscriptions
+
         subscriptions = PushSubscription.objects.filter(user=user, is_active=True)
-        
         if not subscriptions.exists():
             return False, "No active subscriptions found"
-        
+
         vapid_private_key = getattr(settings, 'VAPID_PRIVATE_KEY', None)
-        vapid_claims = getattr(settings, 'VAPID_CLAIMS', {
-            'sub': 'mailto:admin@neverforget.com'
-        })
-        
-        if not vapid_private_key or vapid_private_key == 'YOUR_VAPID_PRIVATE_KEY_HERE':
+        vapid_claims = getattr(settings, 'VAPID_CLAIMS', {'sub': 'mailto:admin@neverforget.com'})
+
+        if not vapid_private_key:
             return False, "VAPID_PRIVATE_KEY not configured in settings"
-        
+
+        # Clean and validate private key
         try:
-            # Clean and process the private key
-            vapid_private_key_clean = vapid_private_key.strip()
-            
-            # Validate the private key format by loading it
-            try:
-                private_key_obj = serialization.load_pem_private_key(
-                    vapid_private_key_clean.encode('utf-8'),
-                    password=None,
-                )
-                # Convert back to PEM format to ensure it's properly formatted
-                vapid_private_key_clean = private_key_obj.private_bytes(
-                    encoding=serialization.Encoding.PEM,
-                    format=serialization.PrivateFormat.PKCS8,
-                    encryption_algorithm=serialization.NoEncryption()
-                ).decode('utf-8')
-            except Exception as key_error:
-                return False, f"Invalid VAPID private key format: {str(key_error)}"
-            
-            # Log the notification attempt
-            notification_log = NotificationLog.objects.create(
-                user=user,
-                notification_type=notification_type,
-                title=title,
-                message=message,
-                status='pending'
+            private_key_obj = serialization.load_pem_private_key(
+                vapid_private_key.encode('utf-8'), password=None
             )
-            
-            success_count = 0
-            for subscription in subscriptions:
-                try:
-                    # Prepare subscription info for pywebpush
-                    subscription_info = {
-                        'endpoint': subscription.endpoint,
-                        'keys': {
-                            'p256dh': subscription.p256dh_key,
-                            'auth': subscription.auth_key
-                        }
+            vapid_private_key_clean = private_key_obj.private_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PrivateFormat.PKCS8,
+                encryption_algorithm=serialization.NoEncryption()
+            ).decode('utf-8')
+        except Exception as key_error:
+            return False, f"Invalid VAPID private key format: {str(key_error)}"
+
+        # Log the notification attempt
+        notification_log = NotificationLog.objects.create(
+            user=user,
+            notification_type=notification_type,
+            title=title,
+            message=message,
+            status='pending'
+        )
+
+        success_count = 0
+        for subscription in subscriptions:
+            try:
+                subscription_info = {
+                    'endpoint': subscription.endpoint,
+                    'keys': {
+                        'p256dh': subscription.p256dh_key,
+                        'auth': subscription.auth_key
                     }
-                    
-                    # Prepare notification data
-                    notification_data = {
-                        'title': title,
-                        'message': message,
-                        'icon': '/static/icons/icon-192x192.png',
-                        'badge': '/static/icons/icon-192x192.png',
-                        'tag': 'birthday-notification',
-                        'data': {
-                            'url': '/home',
-                            'type': 'birthday'
-                        }
-                    }
-                    
-                    response = webpush(
-                        subscription_info=subscription_info,
-                        data=json.dumps(notification_data),
-                        vapid_private_key=vapid_private_key_clean,
-                        vapid_claims=vapid_claims
-                    )
-                    
-                    if response.status_code in [200, 201]:
-                        success_count += 1
-                        
-                except WebPushException as e:
-                    error_msg = str(e)
-                    print(f"WebPush error for subscription {subscription.id}: {error_msg}")
-                    
-                    # Mark subscription as inactive if it's invalid
-                    if any(code in error_msg for code in ['410', '404', '400']):
-                        subscription.is_active = False
-                        subscription.save()
-                        print(f"Marked subscription {subscription.id} as inactive due to error: {error_msg}")
-                        
-                except Exception as e:
-                    print(f"Error sending to subscription {subscription.id}: {str(e)}")
-            
-            # Update notification log
-            if success_count > 0:
-                notification_log.status = 'sent'
-                notification_log.delivered_at = timezone.now()
-                notification_log.save()
-                return True, f"Notification sent successfully to {success_count} device(s)"
-            else:
-                notification_log.status = 'failed'
-                notification_log.error_message = 'No successful deliveries'
-                notification_log.save()
-                return False, "No successful deliveries"
-                
-        except Exception as vapid_error:
-            return False, f"Failed to process VAPID private key: {str(vapid_error)}"
-        
+                }
+
+                notification_data = {
+                    'title': title,
+                    'message': message,
+                    'icon': '/static/icons/icon-192x192.png',
+                    'badge': '/static/icons/icon-192x192.png',
+                    'tag': 'birthday-notification',
+                    'data': {'url': '/home', 'type': 'birthday'}
+                }
+
+                response = webpush(
+                    subscription_info=subscription_info,
+                    data=json.dumps(notification_data),
+                    vapid_private_key=vapid_private_key_clean,
+                    vapid_claims=vapid_claims
+                )
+
+                if response.status_code in [200, 201]:
+                    success_count += 1
+
+            except WebPushException as e:
+                error_msg = str(e)
+                print(f"WebPush error for subscription {subscription.id}: {error_msg}")
+                if any(code in error_msg for code in ['410', '404', '400']):
+                    subscription.is_active = False
+                    subscription.save()
+            except Exception as e:
+                print(f"Error sending to subscription {subscription.id}: {str(e)}")
+
+        # Update log
+        if success_count > 0:
+            notification_log.status = 'sent'
+            notification_log.delivered_at = timezone.now()
+            notification_log.save()
+            return True, f"Notification sent successfully to {success_count} device(s)"
+        else:
+            notification_log.status = 'failed'
+            notification_log.error_message = 'No successful deliveries'
+            notification_log.save()
+            return False, "No successful deliveries"
+
     except ImportError:
         return False, "Required libraries not installed. Run: pip install pywebpush py-vapid"
     except Exception as e:
@@ -142,33 +120,25 @@ def index(request):
     return render(request, 'index.html')
 
 def get_vapid_public_key_view(request):
-    """API endpoint to serve the VAPID public key in the correct format"""
+    """
+    Serve the Base64URL public key for browser push subscription
+    """
     try:
-        # Load the PEM public key
         public_key_pem = settings.VAPID_PUBLIC_KEY.encode('utf-8')
-        
-        # Parse the PEM key
-        public_key = serialization.load_pem_public_key(public_key_pem)
-        
-        # Get the raw public key bytes (uncompressed point format)
-        public_key_bytes = public_key.public_bytes(
+        public_key_obj = serialization.load_pem_public_key(public_key_pem)
+
+        public_key_bytes = public_key_obj.public_bytes(
             encoding=serialization.Encoding.X962,
             format=serialization.PublicFormat.UncompressedPoint
         )
-        
-        # Convert to base64url format (what browsers expect)
+
+        # Convert to Base64URL (remove padding)
         public_key_base64url = base64.urlsafe_b64encode(public_key_bytes).decode('utf-8').rstrip('=')
-        
-        return JsonResponse({
-            'success': True,
-            'public_key': public_key_base64url
-        })
-        
+
+        return JsonResponse({'success': True, 'public_key': public_key_base64url})
     except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'error': str(e)
-        }, status=500)
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
 
 @login_required(login_url='login')
 def home(request):

@@ -1,11 +1,10 @@
 {% load static %}
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NeverForget|home</title>
-
-    <!-- PWA Meta Tags -->
+    <title>NeverForget|home</title> 
     <meta
       name="description"
       content="Connect your community and make every birthday special. Share a simple link, collect birthdays, and ensure no one feels forgotten on their special day."
@@ -105,6 +104,7 @@
             <i class="fas fa-bell"></i>
             <span class="notification-badge">3</span>
           </button>
+
           <div class="user-menu">
             <!-- Changed: Profile picture is now inside a button to act as a toggle -->
             <button
@@ -132,6 +132,11 @@
     </header>
 
     <main>
+      <!-- Temporary button for testing push notification permission -->
+<button id="enable-notifications-btn" class="btn btn-primary">
+  Enable Notifications (Test)
+</button>
+
       <!-- Quick Stats -->
       <section class="stats-section">
         <div class="container">
@@ -461,5 +466,21 @@
     <script src="{% static 'addbirthday.js' %}"></script>
     <script src="{% static 'message.js' %}"></script>
     <script src="{% static 'pwa.js' %}"></script>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("enable-notifications-btn");
+    if (btn && window.pwaManager) {
+      btn.addEventListener("click", async () => {
+        try {
+          await window.pwaManager.requestNotificationPermission();
+          alert("Notification permission status: " + Notification.permission);
+        } catch (err) {
+          console.error("Error requesting notification permission:", err);
+        }
+      });
+    }
+  });
+</script>
+
   </body>
 </html>

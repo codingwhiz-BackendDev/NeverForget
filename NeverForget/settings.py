@@ -33,7 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'phonenumber_field',
-    'App',  # Your app should come last
+    'webpush',
+    'App',  
 ]
  
 
@@ -120,22 +121,28 @@ PWA_APP_ICONS = [
     {'src': '/static/icons/icon-512x512.png', 'sizes': '512x512', 'type': 'image/png'},
 ]
 
-# Push Notification Settings (VAPID Keys)
-VAPID_PRIVATE_KEY = '''-----BEGIN PRIVATE KEY-----
-MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg5ME57kxSbTsLU9GT
-18Y+cQu8ZUnCOfjD57Qn+szh5EChRANCAASjWytFF83vnkSg3rZxYXDgg318M7XA
-BRgHOCix9USYH03VCHDlTVOmAQ+7zGlqcEqJP8tc50P9dsmKBZ6/7cln
------END PRIVATE KEY-----'''
 
-VAPID_PUBLIC_KEY = '''-----BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEo1srRRfN755EoN62cWFw4IN9fDO1
-wAUYBzgosfVEmB9N1Qhw5U1TpgEPu8xpanBKiT/LXOdD/XbJigWev+3JZw==
------END PUBLIC KEY-----'''
+VAPID_PRIVATE_KEY = '''
+-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgJU2ZqWlInmP0otoU
+PXP+Qz7TsFHyzKqqiMhXhpHv7M2hRANCAAQp2Xbl8jzsR6WJa0nuNCbJTnHRGl+l
+2Sb/Jd53tmOmo1YkYMwx/pdlvn2jiJy74kdKBOeMb6yrqFB1vZzxOmX7
+-----END PRIVATE KEY-----
+'''
+
+VAPID_PUBLIC_KEY = '''
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEKdl25fI87EeliWtJ7jQmyU5x0Rpf
+pdkm/yXed7ZjpqNWJGDMMf6XZb59o4icu+JHSgTnjG+sq6hQdb2c8Tpl+w==
+-----END PUBLIC KEY-----
+'''
 
 VAPID_CLAIMS = {
     'sub': 'mailto:admin@neverforget.com',
     'aud': 'https://fcm.googleapis.com'
 }
+
+
 
 # Notification Settings
 NOTIFICATION_BATCH_SIZE = 100

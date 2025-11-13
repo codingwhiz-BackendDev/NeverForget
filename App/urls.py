@@ -1,6 +1,9 @@
 from django.urls import path
 from . import views
 
+from django.urls import path
+from webpush import views as webpush_views
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('login', views.login, name='login'),
@@ -14,9 +17,9 @@ urlpatterns = [
     path('profile/<str:pk>/', views.formLink , name = 'profile'),
     
     # PWA URLs
+    path('webpush/save/', webpush_views.save_info, name='save_webpush_info'),
     path('api/push-subscription/', views.push_subscription, name='push_subscription'),
-    path('api/vapid-public-key/', views.get_vapid_public_key_view, name='vapid_public_key'),
-    path('api/vapid-public-key/', views.get_vapid_public_key_view, name='get_vapid_public_key'),
+    path('api/vapid-public-key/', views.get_vapid_public_key_view, name='vapid_public_key'), 
     path('api/send-birthday-notification/', views.send_birthday_notification, name='send_birthday_notification'),
     path('api/notification-preferences/', views.notification_preferences, name='notification_preferences'),
     path('api/notification-logs/', views.notification_logs, name='notification_logs'),
