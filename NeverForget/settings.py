@@ -32,33 +32,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloudinary_storage',  # Must come before django.contrib.staticfiles
-    'cloudinary',
     'phonenumber_field',
     'App',  # Your app should come last
 ]
-
  
-    # Fallback to individual environment variables
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUD_NAME', 'dodutzaqm'),
-    'API_KEY': os.getenv('API_KEY', '593872619215443'),
-    'API_SECRET': os.getenv('API_SECRET', 'o7RxNSiNpvycvG8Oaai3Nxfjcng'),
-    'STATIC_TAG': 'neverforget',
-}
-
-# Storage backends (Django 5+)
-STORAGES = {
-    'default': {
-        'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
-    },
-    'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
-
-# For backward compatibility in apps that read this setting
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
