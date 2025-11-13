@@ -111,11 +111,19 @@
               class="btn-icon profile-toggle"
               onclick="toggleProfileMenu()"
             >
-              <img
+            {% if adminProfile.adminImage %}
+            <img
+                src="{{adminProfile.adminImage.url}}"
+                alt="Profile"
+                class="profile-pic"
+              />
+            {% else %}
+            <img
                 src="{% static 'sta.jpg' %}"
                 alt="Profile"
                 class="profile-pic"
               />
+            {% endif %}
             </button>
             <!-- The dropdown content will be dynamically created by JavaScript -->
           </div>
